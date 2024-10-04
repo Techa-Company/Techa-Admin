@@ -1,25 +1,16 @@
-import { theme } from "antd";
 import MainLayout from "./layout/MainLayout";
-import BreadCrumb from "../components/BreadCrumb";
+import BreadCrumb from "../components/common/BreadCrumb";
 
 const Dashboard = () => {
 
-    const {
-        token: { colorBgContainer, borderRadiusLG }
-    } = theme.useToken();
-
     return (
         <MainLayout>
-            <BreadCrumb items={["خانه", "داشبورد"]} />
+            <BreadCrumb items={[{ title: "خانه" }, { title: "داشبورد" }]} />
             <div
-                style={{
-                    padding: 24,
-                    minHeight: 360,
-                    background: colorBgContainer,
-                    borderRadius: borderRadiusLG,
-                }}
+                className="bg-white h-full p-6 rounded-lg"
             >
-                ggg
+                اینجا داشبورد هست مرگ بر آمریکا <br />
+                مرگ بر اسرائیل
             </div>
         </MainLayout>
     );

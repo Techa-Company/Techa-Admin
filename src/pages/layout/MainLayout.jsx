@@ -9,17 +9,16 @@ const { Content } = Layout;
 const MainLayout = ({ children }) => {
     return (
         <Layout
-            style={{
-                minHeight: '100vh',
-            }}
+            className='h-screen'
         >
             <Sidebar />
-            <Layout>
+            <Layout        >
                 <MainHeader />
                 <Content
                     style={{
                         margin: '0 16px',
                     }}
+                    className='overflow-y-auto'
                 >
                     {children}
                 </Content>

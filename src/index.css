@@ -69,3 +69,20 @@
 * {
   font-family: YekanBakh !important;
 }
+
+/* styles.css */
+::-webkit-scrollbar {
+  width: 10px; /* width of the scrollbar */
+  border-radius: 25px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff; /* color of the track */
+  border-radius: 25px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6; /* color of the thumb */
+  border-radius: 25px !important;
+  cursor: pointer !important;
+}
