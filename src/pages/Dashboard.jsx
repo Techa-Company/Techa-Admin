@@ -9,8 +9,7 @@ const Dashboard = () => {
             <div
                 className="bg-white h-full p-6 rounded-lg"
             >
-                اینجا داشبورد هست مرگ بر آمریکا <br />
-                مرگ بر اسرائیل
+                اینجا داشبورد هست
             </div>
         </MainLayout>
     );

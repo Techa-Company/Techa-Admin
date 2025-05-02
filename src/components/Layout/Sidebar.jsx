@@ -38,7 +38,11 @@ const Sidebar = () => {
                     icon: <FileOutlined />,
                 },
                 {
-                    label: 'لیست اساتید',
+                    label: (
+                        <Link to="/masters" rel="noopener noreferrer">
+                            لیست اساتید
+                        </Link>
+                    ),
                     key: 'mastersList',
                     icon: <FileOutlined />,
                 },
