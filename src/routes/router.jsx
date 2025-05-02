@@ -5,6 +5,7 @@ import Dashboard from '../pages/dashboard/Dashboard';
 import Courses from '../pages/courses/Courses';
 import AddCourse from '../pages/courses/AddCourse';
 import EditCourse from '../pages/courses/EditCourse';
+import Students from '../pages/students/Students';
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
             {
                 path: "/courses/edit/:id",
                 element: <EditCourse />
+            },
+            {
+                path: "/students",
+                element: <Students />
             },
         ]
     },
