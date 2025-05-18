@@ -55,12 +55,12 @@ export const sidelinks = [
         href: "/students",
         icon: <IconHexagonNumber1 size={18} />,
       },
-      {
-        title: "سطح‌بندی دانشجویان",
-        label: "",
-        href: "/students/levels",
-        icon: <IconHexagonNumber2 size={18} />,
-      },
+      // {
+      //   title: "سطح‌بندی دانشجویان",
+      //   label: "",
+      //   href: "/students/levels",
+      //   icon: <IconHexagonNumber2 size={18} />,
+      // },
     ],
   },
   {

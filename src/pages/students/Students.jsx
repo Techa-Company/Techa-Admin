@@ -45,7 +45,7 @@ const columns = [
     {
         accessorKey: "fullName",
         header: "نام کامل",
-        cell: ({ row }) => <div className='text-center'>{row.getValue("fullName")}</div>,
+        cell: ({ row }) => <Link to={`/students/${row.getValue("id")}`} className='text-center block'>{row.getValue("fullName")}</Link>,
     },
     {
         accessorKey: "email",
