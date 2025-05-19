@@ -9,6 +9,7 @@ import Students from '../pages/students/Students';
 import EditStudent from '../pages/students/EditStudent';
 import StudentDetail from '../pages/students/StudentDetail';
 import Categories from '../pages/course-categories/Categories';
+import AddCategory from '../pages/course-categories/AddCategories';
 
 export const router = createBrowserRouter([
     {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
             {
                 path: "/course-categories",
                 element: <Categories />
+            },
+            {
+                path: "/course-categories/new",
+                element: <AddCategory />
             },
             {
                 path: "/students",
