@@ -112,31 +112,31 @@ const columns = [
     {
         id: "actions",
         enableHiding: false,
-        header: () => <div>عملیات</div>,
+        header: () => <div className="text-center">عملیات</div>,
         cell: ({ row }) => {
             const course = row.original;
             return (
-
-
-                <DropdownMenu >
-                    <DropdownMenuTrigger asChild >
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">باز کردن منو</span>
-                            <MoreHorizontalIcon className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                        <DropdownMenuLabel>عملیات</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(course.title)}>
-                            کپی عنوان
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Link to={`edit/${course.id}`}>ویرایش</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>حذف</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex justify-center items-center">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">باز کردن منو</span>
+                                <MoreHorizontalIcon className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            <DropdownMenuLabel>عملیات</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(course.title)}>
+                                کپی عنوان
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <Link to={`edit/${course.id}`}>ویرایش</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>حذف</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             );
         },
     },

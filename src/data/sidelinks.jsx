@@ -38,7 +38,7 @@ export const sidelinks = [
       {
         title: "دسته بندی دوره ها",
         label: "",
-        href: "/courses/category",
+        href: "/course-categories",
         icon: <IconHexagonNumber2 size={18} />,
       },
     ],
