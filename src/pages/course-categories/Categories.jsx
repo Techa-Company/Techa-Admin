@@ -21,7 +21,7 @@ const columns = [
     },
     {
         accessorKey: "name",
-        header: "نام دسته‌بندی",
+        header: "عنوان دسته‌بندی",
         cell: ({ row }) => <div className="text-center">{row.getValue("name")}</div>,
     },
     {
@@ -65,7 +65,7 @@ const columns = [
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                                <Link to={`edit-category/${category.id}`}>ویرایش</Link>
+                                <Link to={`${category.id}`}>ویرایش</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>حذف</DropdownMenuItem>
                         </DropdownMenuContent>

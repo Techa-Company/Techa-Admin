@@ -10,6 +10,7 @@ import EditStudent from '../pages/students/EditStudent';
 import StudentDetail from '../pages/students/StudentDetail';
 import Categories from '../pages/course-categories/Categories';
 import AddCategory from '../pages/course-categories/AddCategories';
+import EditCategory from '../pages/course-categories/EditCategory';
 
 export const router = createBrowserRouter([
     {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
             {
                 path: "/course-categories/new",
                 element: <AddCategory />
+            },
+            {
+                path: "/course-categories/:id",
+                element: <EditCategory />
             },
             {
                 path: "/students",
