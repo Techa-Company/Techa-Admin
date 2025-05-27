@@ -145,20 +145,20 @@ const columns = [
     },
 ];
 
-const Courses = () => {
+const CourseExercises = () => {
 
     const navigate = useNavigate();
 
     return (
         <>
             <div className='mb-2 flex items-center justify-between space-y-2'>
-                <h1 className='text-2xl font-bold tracking-tight'>لیست دوره ها</h1>
+                <h1 className='text-2xl font-bold tracking-tight'>لیست تمرین ها</h1>
                 <div className='flex items-center gap-3'>
                     {/* <Button >برسی کد جایزه</Button> */}
                     <Button
                         className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer"
                         onClick={() => navigate("new")}
-                    >ایجاد دوره </Button>
+                    >ایجاد تمرین </Button>
                 </div>
             </div>
 
@@ -170,4 +170,4 @@ const Courses = () => {
     );
 };
 
-export default Courses;
+export default CourseExercises;

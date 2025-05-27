@@ -55,12 +55,26 @@ export const sidelinks = [
         href: "/students",
         icon: <IconHexagonNumber1 size={18} />,
       },
-      // {
-      //   title: "سطح‌بندی دانشجویان",
-      //   label: "",
-      //   href: "/students/levels",
-      //   icon: <IconHexagonNumber2 size={18} />,
-      // },
+      {
+        title: "لیست تمرین ها",
+        label: "",
+        href: "/submitted-exercises",
+        icon: <IconHexagonNumber2 size={18} />,
+      },
+    ],
+  },
+  {
+    title: "مدیریت تمرین ها",
+    label: "",
+    href: "",
+    icon: <ClipboardCheck size={18} />,
+    sub: [
+      {
+        title: "لیست تمرین ها",
+        label: "",
+        href: "/exercises",
+        icon: <IconHexagonNumber1 size={18} />,
+      },
     ],
   },
   {
@@ -112,7 +126,7 @@ export const sidelinks = [
   {
     title: "پیام‌ها",
     label: "",
-    href: "/messages",
+    href: "/tickets",
     icon: <Mail size={18} />,
   },
   {

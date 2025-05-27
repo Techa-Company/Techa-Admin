@@ -11,6 +11,10 @@ import StudentDetail from '../pages/students/StudentDetail';
 import Categories from '../pages/course-categories/Categories';
 import AddCategory from '../pages/course-categories/AddCategories';
 import EditCategory from '../pages/course-categories/EditCategory';
+import SubmittedExercises from '../pages/submitted-exercises/Exercises';
+import CourseExercises from '../pages/course-exercises/CourseExercises';
+import Tickets from '../pages/tickets/Tickets';
+import TicketDetail from '../pages/tickets/TicketDetail';
 
 export const router = createBrowserRouter([
     {
@@ -34,6 +38,22 @@ export const router = createBrowserRouter([
                 element: <EditCourse />
             },
             {
+                path: "/courses/:id/exercises",
+                element: <CourseExercises />
+            },
+            {
+                path: "/courses/:id/exercises/:id",
+                element: <EditCourse />
+            },
+            {
+                path: "/courses/:id/exercises/new",
+                element: <EditCourse />
+            },
+            {
+                path: "/courses/:id/exercises/:id/edit",
+                element: <EditCourse />
+            },
+            {
                 path: "/course-categories",
                 element: <Categories />
             },
@@ -46,6 +66,19 @@ export const router = createBrowserRouter([
                 element: <EditCategory />
             },
             {
+                path: "/exercises/:id/submissions",
+                element: <EditCategory />
+            },
+            {
+                path: "/exercises/:id/submissions/:id",
+                element: <EditCategory />
+            },
+            {
+                path: "/course-categories/:id",
+                element: <EditCategory />
+            },
+
+            {
                 path: "/students",
                 element: <Students />
             },
@@ -56,6 +89,27 @@ export const router = createBrowserRouter([
             {
                 path: "/students/edit/:id",
                 element: <EditStudent />
+            },
+            {
+                path: "/submitted-exercises",
+                element: <SubmittedExercises />
+            },
+            {
+                path: "/students/:id/exercises",
+                element: <StudentDetail />
+            },
+            {
+                path: "/students/:id/exercises/:id",
+                element: <StudentDetail />
+            }
+            ,
+            {
+                path: "/tickets",
+                element: <Tickets />
+            },
+            {
+                path: "/tickets/:id",
+                element: <TicketDetail />
             },
         ]
     },
