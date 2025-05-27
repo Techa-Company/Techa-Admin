@@ -56,7 +56,6 @@ const data = [
             }
         ]
     },
-    // ... سایر داده‌ها
 ];
 const relatedTickets = [
     { id: 2, subject: 'خطای پرداخت هنگام ثبت سفارش', status: 'باز' },
@@ -287,7 +286,7 @@ const TicketDetail = () => {
                             }
                             p { margin: 0 0 1.5rem; }
                             `,
-                            images_upload_handler: async (blobInfo) => {
+                            images_upload_handler: async () => {
                                 // آپلود عکس به سرور
                             }
                         }}

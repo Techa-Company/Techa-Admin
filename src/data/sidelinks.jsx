@@ -14,6 +14,7 @@ import {
   Mail,
   Settings,
   FolderKanban,
+  ShoppingBag,
 } from "lucide-react";
 
 export const sidelinks = [
@@ -122,6 +123,12 @@ export const sidelinks = [
     label: "",
     href: "/certificates",
     icon: <GraduationCap size={18} />,
+  },
+  {
+    title: "خرید ها",
+    label: "",
+    href: "/purchases",
+    icon: <ShoppingBag size={18} />,
   },
   {
     title: "پیام‌ها",

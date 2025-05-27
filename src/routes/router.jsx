@@ -15,6 +15,10 @@ import SubmittedExercises from '../pages/submitted-exercises/Exercises';
 import CourseExercises from '../pages/course-exercises/CourseExercises';
 import Tickets from '../pages/tickets/Tickets';
 import TicketDetail from '../pages/tickets/TicketDetail';
+import Purchases from '../pages/purchases/Purchases';
+import PurchaseDetails from '../pages/purchases/PurchaseDetails';
+import Quizzes from '../pages/quizzes/Quizzes';
+import QuizDetails from '../pages/quizzes/QuizDetails';
 
 export const router = createBrowserRouter([
     {
@@ -101,8 +105,23 @@ export const router = createBrowserRouter([
             {
                 path: "/students/:id/exercises/:id",
                 element: <StudentDetail />
-            }
-            ,
+            },
+            {
+                path: "/purchases",
+                element: <Purchases />
+            },
+            {
+                path: "/purchases/:id",
+                element: <PurchaseDetails />
+            },
+            {
+                path: "/quizzes",
+                element: <Quizzes />
+            },
+            {
+                path: "/quizzes/:id",
+                element: <QuizDetails />
+            },
             {
                 path: "/tickets",
                 element: <Tickets />
