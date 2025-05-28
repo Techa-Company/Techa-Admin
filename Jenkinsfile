@@ -14,7 +14,7 @@ pipeline {
         stage('Clone') {
             steps {
               git branch: 'main',
-                  url: 'https://gitea/techa-gitea-admin/Techa-Admin.git'
+                  url: 'https://gitea.techa.me/techa-gitea-admin/Techa-Admin.git'
             }
         }
 
