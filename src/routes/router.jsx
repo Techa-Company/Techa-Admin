@@ -19,6 +19,8 @@ import Purchases from '../pages/purchases/Purchases';
 import PurchaseDetails from '../pages/purchases/PurchaseDetails';
 import Quizzes from '../pages/quizzes/Quizzes';
 import QuizDetails from '../pages/quizzes/QuizDetails';
+import AddExercise from '../pages/course-exercises/AddExercise';
+import EditExercise from '../pages/course-exercises/EditExercise';
 
 export const router = createBrowserRouter([
     {
@@ -113,6 +115,18 @@ export const router = createBrowserRouter([
             {
                 path: "/purchases/:id",
                 element: <PurchaseDetails />
+            },
+            {
+                path: "/exercises",
+                element: <CourseExercises />
+            },
+            {
+                path: "/exercises/new",
+                element: <AddExercise />
+            },
+            {
+                path: "/exercises/:id/edit",
+                element: <EditExercise />
             },
             {
                 path: "/quizzes",
