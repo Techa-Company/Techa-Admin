@@ -62,6 +62,12 @@ export const sidelinks = [
         href: "/submitted-exercises",
         icon: <IconHexagonNumber2 size={18} />,
       },
+      {
+        title: "آزمون های ارسالی",
+        label: "",
+        href: "/submitted-quizzes",
+        icon: <IconHexagonNumber3 size={18} />,
+      },
     ],
   },
   {
@@ -85,16 +91,10 @@ export const sidelinks = [
     icon: <ClipboardCheck size={18} />,
     sub: [
       {
-        title: "ایجاد آزمون",
-        label: "",
-        href: "/quizzes/new",
-        icon: <IconHexagonNumber1 size={18} />,
-      },
-      {
         title: "لیست آزمون‌ها",
         label: "",
         href: "/quizzes",
-        icon: <IconHexagonNumber2 size={18} />,
+        icon: <IconHexagonNumber1 size={18} />,
       },
     ],
   },

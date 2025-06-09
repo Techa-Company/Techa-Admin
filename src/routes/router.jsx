@@ -22,6 +22,7 @@ import QuizDetails from '../pages/quizzes/QuizDetails';
 import AddExercise from '../pages/course-exercises/AddExercise';
 import EditExercise from '../pages/course-exercises/EditExercise';
 import SubmittedExerciseDetail from '../pages/submitted-exercises/SubmittedExerciseDetail';
+import SubmittedQuizzes from '../pages/submited-quizzes/SubmittedQuizzes';
 
 export const router = createBrowserRouter([
     {
@@ -103,6 +104,14 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/submitted-exercises/:id",
+                element: <SubmittedExerciseDetail />
+            },
+            {
+                path: "/submitted-quizzes",
+                element: <SubmittedQuizzes />
+            },
+            {
+                path: "/submitted-quizzes/:id",
                 element: <SubmittedExerciseDetail />
             },
             {
