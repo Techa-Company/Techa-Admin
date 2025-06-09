@@ -57,7 +57,7 @@ export const sidelinks = [
         icon: <IconHexagonNumber1 size={18} />,
       },
       {
-        title: "لیست تمرین ها",
+        title: "تمرینات ارسالی",
         label: "",
         href: "/submitted-exercises",
         icon: <IconHexagonNumber2 size={18} />,

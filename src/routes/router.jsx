@@ -11,7 +11,7 @@ import StudentDetail from '../pages/students/StudentDetail';
 import Categories from '../pages/course-categories/Categories';
 import AddCategory from '../pages/course-categories/AddCategories';
 import EditCategory from '../pages/course-categories/EditCategory';
-import SubmittedExercises from '../pages/submitted-exercises/Exercises';
+import SubmittedExercises from '../pages/submitted-exercises/SubmittedExercises';
 import CourseExercises from '../pages/course-exercises/CourseExercises';
 import Tickets from '../pages/tickets/Tickets';
 import TicketDetail from '../pages/tickets/TicketDetail';
@@ -21,6 +21,7 @@ import Quizzes from '../pages/quizzes/Quizzes';
 import QuizDetails from '../pages/quizzes/QuizDetails';
 import AddExercise from '../pages/course-exercises/AddExercise';
 import EditExercise from '../pages/course-exercises/EditExercise';
+import SubmittedExerciseDetail from '../pages/submitted-exercises/SubmittedExerciseDetail';
 
 export const router = createBrowserRouter([
     {
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
             {
                 path: "/submitted-exercises",
                 element: <SubmittedExercises />
+            },
+            {
+                path: "/submitted-exercises/:id",
+                element: <SubmittedExerciseDetail />
             },
             {
                 path: "/students/:id/exercises",
