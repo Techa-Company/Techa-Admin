@@ -9,14 +9,15 @@ import { Label } from '../../components/ui/label';
 import { Switch } from '../../components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { toast } from 'react-toastify';
-import { fetchDocById, } from '../../features/docs/docsActions';
+import { createAndUpdateDoc, fetchDocById, } from '../../features/docs/docsActions';
 
 const EditDocument = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { currentDoc, loading, error } = useSelector((state) => state.docs);
+    const { singleDoc, loading, error } = useSelector((state) => state.docs);
 
+    console.log(id)
     const [formData, setFormData] = useState({
         Title: '',
         Summary: '',
@@ -25,27 +26,31 @@ const EditDocument = () => {
         Features: '',
         Disabled: false,
         Prerequisites: '',
-        TargetAudience: ''
+        TargetAudience: '',
+        SortIndex: ''
     });
 
     useEffect(() => {
-        dispatch(fetchDocById(id));
+        dispatch(fetchDocById({ "@Id": id }));
     }, [dispatch, id]);
 
     useEffect(() => {
-        if (currentDoc) {
+        console.log("🚀 singleDoc:", singleDoc); // اینو اضافه کن برای دیباگ
+
+        if (singleDoc) {
             setFormData({
-                Title: currentDoc.Title,
-                Summary: currentDoc.Summary,
-                Description: currentDoc.Description,
-                Level: currentDoc.Level,
-                Features: currentDoc.Features,
-                Disabled: currentDoc.Disabled,
-                Prerequisites: currentDoc.Prerequisites,
-                TargetAudience: currentDoc.TargetAudience
+                Title: singleDoc.Title,
+                Summary: singleDoc.Summary,
+                Description: singleDoc.Description,
+                Level: singleDoc.Level,
+                Features: singleDoc.Features,
+                Disabled: singleDoc.Disabled,
+                Prerequisites: singleDoc.Prerequisites,
+                TargetAudience: singleDoc.TargetAudience,
+                SortIndex: singleDoc.SortIndex
             });
         }
-    }, [currentDoc]);
+    }, [singleDoc]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,15 +62,35 @@ const EditDocument = () => {
     };
 
     const handleSubmit = async (e) => {
-        // e.preventDefault();
-        // try {
-        //     await dispatch(updateDoc({ id, ...formData })).unwrap();
-        //     toast.success('مستند با موفقیت ویرایش شد');
-        //     navigate('/docs');
-        // } catch (error) {
-        //     toast.error(`خطا در ویرایش مستند: ${error.message}`);
-        // }
+        e.preventDefault();
+
+        const data = {
+            "@Id": id, // برای ویرایش باید آیدی مستند رو بدی
+            "@Title": formData.Title,
+            "@Summary": formData.Summary,
+            "@Description": formData.Description,
+            "@Level": formData.Level,
+            "@Features": formData.Features,
+            "@Disabled": formData.Disabled,
+            "@Prerequisites": formData.Prerequisites,
+            "@TargetAudience": formData.TargetAudience,
+            "@SortIndex": formData.SortIndex,
+            "@Price": "10"
+        };
+
+        console.log(data)
+
+        try {
+            await dispatch(createAndUpdateDoc(data)).unwrap();
+            toast.success('مستند با موفقیت ویرایش شد');
+            navigate('/docs');
+        } catch (error) {
+            toast.error(`خطا در ویرایش مستند: ${error.message}`);
+            console.error("Error creating doc:", error);
+
+        }
     };
+
 
     if (loading) return <p>در حال بارگذاری...</p>;
     if (error) return <p>خطا: {error}</p>;
@@ -155,7 +180,8 @@ const EditDocument = () => {
                 </div>
 
                 {/* ویژگی‌ها و پیش‌نیازها */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+
                     < div className="mb-6" >
                         <Label className="mb-2" htmlFor="Features">
                             ویژگی‌ها (با کاما جدا کنید)
@@ -168,6 +194,8 @@ const EditDocument = () => {
                             placeholder="مثال: ویژگی اول, ویژگی دوم"
                         />
                     </div >
+
+                    {/* پیش‌نیازها */}
                     < div className="mb-6" >
                         <Label className="mb-2" htmlFor="Prerequisites">پیش‌نیازها</Label>
                         <Input
@@ -177,6 +205,19 @@ const EditDocument = () => {
                             onChange={handleChange}
                         />
                     </div >
+                    < div className="mb-6" >
+                        <Label className="mb-2" htmlFor="SortIndex">مرتب سازی</Label>
+                        <Input
+                            type="number"
+                            id="SortIndex"
+                            name="SortIndex"
+                            value={formData.SortIndex}
+                            onChange={handleChange}
+                        />
+                    </div >
+
+                    {/* مناسب برای */}
+
                 </div>
 
                 {/* وضعیت */}
@@ -195,7 +236,7 @@ const EditDocument = () => {
                     <Button
                         type="button"
                         variant="outline"
-                        onClick={() => navigate('/Documents')}
+                        onClick={() => navigate('/docs')}
                     >
                         لغو
                     </Button>

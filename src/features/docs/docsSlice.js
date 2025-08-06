@@ -46,7 +46,7 @@ const docsSlice = createSlice({
                 state.loading = true
                 state.error = null
             })
-            .addCase(createAndUpdateDoc.fulfilled, (state, action) => {
+            .addCase(createAndUpdateDoc.fulfilled, (state) => {
                 state.loading = false
                 // state.docs = action.payload
             })
@@ -58,7 +58,7 @@ const docsSlice = createSlice({
                 state.loading = true
                 state.error = null
             })
-            .addCase(deleteDoc.fulfilled, (state, action) => {
+            .addCase(deleteDoc.fulfilled, (state) => {
                 state.loading = false
                 // state.docs = action.payload
             })
