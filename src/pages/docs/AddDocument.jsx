@@ -7,10 +7,10 @@ import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { Label } from '../../components/ui/label';
 import { Switch } from '../../components/ui/switch';
-// import { createDoc } from '../../features/docs/docsActions';
+// import { createAndUpdateDoc } from '../../features/docs/docsActions';
 import { toast } from 'react-toastify';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
-import { createDoc } from '../../features/docs/docsActions';
+import { createAndUpdateDoc } from '../../features/docs/docsActions';
 
 const AddDocument = () => {
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ const AddDocument = () => {
         e.preventDefault();
         console.log(data)
         try {
-            await dispatch(createDoc(data)).unwrap();
+            await dispatch(createAndUpdateDoc(data)).unwrap();
             toast.success('مستند با موفقیت ایجاد شد');
             navigate('/docs');
         } catch (error) {

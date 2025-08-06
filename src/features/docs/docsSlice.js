@@ -1,7 +1,7 @@
 // src/features/docs/docsSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { createDoc, fetchDocById, fetchDocContents, fetchDocs } from './docsActions'
+import { createAndUpdateDoc, deleteDoc, fetchDocById, fetchDocContents, fetchDocs } from './docsActions'
 
 const initialState = {
     docs: [],
@@ -42,15 +42,27 @@ const docsSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
-            .addCase(createDoc.pending, (state) => {
+            .addCase(createAndUpdateDoc.pending, (state) => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(createDoc.fulfilled, (state, action) => {
+            .addCase(createAndUpdateDoc.fulfilled, (state, action) => {
                 state.loading = false
                 // state.docs = action.payload
             })
-            .addCase(createDoc.rejected, (state, action) => {
+            .addCase(createAndUpdateDoc.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(deleteDoc.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteDoc.fulfilled, (state, action) => {
+                state.loading = false
+                // state.docs = action.payload
+            })
+            .addCase(deleteDoc.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

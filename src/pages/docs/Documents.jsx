@@ -12,131 +12,13 @@ import {
 import { ArrowUpDown, MoreHorizontalIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDocs } from '../../features/docs/docsActions';
+import { createAndUpdateDoc, deleteDoc, fetchDocs } from '../../features/docs/docsActions';
 import { minuteToHour } from '../../helper';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 
-const columns = [
-    {
-        accessorKey: "SortIndex",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                ردیف
-                <ArrowUpDown className="mr-2 h-4 w-4" />
-            </Button>
-        ),
-        cell: ({ row }) => <div className="text-center">{row.getValue("SortIndex")}</div>,
-    },
-    {
-        accessorKey: "Title",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                عنوان دوره
-                <ArrowUpDown className="mr-2 h-4 w-4" />
-            </Button>
-        ),
-        cell: ({ row }) => <div className="text-center">{row.getValue("Title")}</div>,
-    },
-    {
-        accessorKey: "Summary",
-        header: () => <div>توضیحات</div>,
-        cell: ({ row }) => <div className="text-center">{row.getValue("Summary")}</div>,
-    },
-    {
-        accessorKey: "Duration",
-        header: () => <div>مدت زمان</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{minuteToHour(row.getValue("Duration"))}</div>
-        ),
-    },
-    {
-        accessorKey: "Lessons",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                تعداد دروس
-                <ArrowUpDown className="mr-2 h-4 w-4" />
-            </Button>
-        ), cell: ({ row }) => (
-            <div className="text-center">{row.getValue("Lessons")} قسمت</div>
-        ),
-    },
-    {
-        accessorKey: "Level",
-        header: () => <div>سطح دوره</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("Level")}</div>
-        ),
-    },
-    {
-        accessorKey: "Disabled",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                وضعیت
-                <ArrowUpDown className="mr-2 h-4 w-4" />
-            </Button>
-        ), cell: ({ row }) => {
-            const disabled = row.getValue("Disabled");
-            console.log(disabled)
-            return (
-                <span
-                    className={`px-2 py-1 rounded block mx-auto w-fit text-xs ${!disabled
-                        ? "bg-green-200 text-green-800"
-                        : "bg-red-200 text-red-800"
-                        }`}
-                >
-                    {!disabled ? "فعال" : "غیرفعال"}
-                </span>
-            );
-        },
-    },
-    {
-        id: "actions",
-        enableHiding: false,
-        header: () => <div className="text-center">عملیات</div>,
-        cell: ({ row }) => {
-            const doc = row.original;
-            return (
-                <div className="flex justify-center items-center">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">باز کردن منو</span>
-                                <MoreHorizontalIcon className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                            <DropdownMenuLabel>عملیات</DropdownMenuLabel>
-
-                            <DropdownMenuItem>
-                                <Link to={`/Documents/${doc.Id}/exercises`}>تمرینات</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <Link to={doc.Id.toString()}>مشاهده</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Link to={`edit/${doc.Id}`}>ویرایش</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>حذف</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-            );
-        },
-    },
-];
 
 const Documents = () => {
     const navigate = useNavigate();
@@ -150,8 +32,195 @@ const Documents = () => {
     if (loading) return <p>در حال بارگذاری...</p>;
     if (error) return <p>خطا: {error}</p>;
 
-    // تبدیل داده‌های واقعی به ساختار جدول با داده‌های فیک
 
+    const changeStatus = async (doc) => {
+        const data = {
+            "@Id": doc.Id,
+            "@Disabled": !doc.Disabled,
+            "@Title": doc.Title,
+            "@SortIndex": doc.SortIndex,
+            "@Price": "10"
+        };
+
+        try {
+            const resultAction = await dispatch(createAndUpdateDoc(data));
+
+            if (createAndUpdateDoc.fulfilled.match(resultAction)) {
+                toast.success('تغییر وضعیت مستند انجام شد');
+                // Reload docs to reflect new state
+                dispatch(fetchDocs({ "@PageSize": 20 }));
+            } else {
+                toast.error('خطا در تغییر وضعیت مستند');
+            }
+        } catch (error) {
+            toast.error(`خطا در تغییر وضعیت مستند: ${error.message}`);
+        }
+    };
+
+    const MySwal = withReactContent(Swal);
+
+    const handleDeleteDoc = async (id) => {
+        const confirm = await MySwal.fire({
+            title: 'آیا از حذف این دوره مطمئن هستید؟',
+            text: "این عمل قابل بازگشت نیست!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'بله، حذف شود!',
+            cancelButtonText: 'لغو',
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const data = {
+            "@Id": id,
+        };
+
+        try {
+            const resultAction = await dispatch(deleteDoc(data));
+
+            if (resultAction.type === deleteDoc.fulfilled.type) {
+                toast.success('مستند با موفقیت حذف شد');
+                dispatch(fetchDocs({ "@PageSize": 20 }));
+            } else {
+                toast.error('خطا در حذف مستند');
+            }
+        } catch (error) {
+            toast.error(`خطا در حذف مستند: ${error.message}`);
+        }
+    };
+
+
+    const columns = [
+        {
+            accessorKey: "SortIndex",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    ردیف
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="text-center">{row.getValue("SortIndex")}</div>,
+        },
+        {
+            accessorKey: "Title",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    عنوان دوره
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="text-center">{row.getValue("Title")}</div>,
+        },
+        {
+            accessorKey: "Summary",
+            header: () => <div>توضیحات</div>,
+            cell: ({ row }) => <div className="text-center">{row.getValue("Summary")}</div>,
+        },
+        {
+            accessorKey: "Duration",
+            header: () => <div>مدت زمان</div>,
+            cell: ({ row }) => (
+                <div className="text-center">{minuteToHour(row.getValue("Duration"))}</div>
+            ),
+        },
+        {
+            accessorKey: "Lessons",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    تعداد دروس
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                </Button>
+            ), cell: ({ row }) => (
+                <div className="text-center">{row.getValue("Lessons")} قسمت</div>
+            ),
+        },
+        {
+            accessorKey: "Level",
+            header: () => <div>سطح دوره</div>,
+            cell: ({ row }) => (
+                <div className="text-center">{row.getValue("Level")}</div>
+            ),
+        },
+        {
+            accessorKey: "Disabled",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    وضعیت
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                </Button>
+            ), cell: ({ row }) => {
+                const disabled = row.getValue("Disabled");
+                return (
+                    <span
+                        className={`px-2 py-1 rounded block mx-auto w-fit text-xs ${!disabled
+                            ? "bg-green-200 text-green-800"
+                            : "bg-red-200 text-red-800"
+                            }`}
+                    >
+                        {!disabled ? "فعال" : "غیرفعال"}
+                    </span>
+                );
+            },
+        },
+        {
+            id: "actions",
+            enableHiding: false,
+            header: () => <div className="text-center">عملیات</div>,
+            cell: ({ row }) => {
+                const doc = row.original;
+                return (
+                    <div className="flex justify-center items-center">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                                    <span className="sr-only">باز کردن منو</span>
+                                    <MoreHorizontalIcon className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                                {/* <DropdownMenuLabel>عملیات</DropdownMenuLabel> */}
+
+                                <DropdownMenuItem>
+                                    <Link to={`/Documents/${doc.Id}/exercises`}>تمرینات</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link to={doc.Id.toString()}>مشاهده</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>
+                                    <span
+                                        className={`${doc.Disabled ? "text-green-500" : "text-red-500"}`}
+                                        onClick={() => changeStatus(doc)}
+                                    >{doc.Disabled ? "فعال کردن" : "غیرفعال کردن"}
+                                    </span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Link to={`edit/${doc.Id}`}>ویرایش</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-red-500"
+                                    onClick={() => handleDeleteDoc(doc.Id)}
+                                >حذف</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div >
+                );
+            },
+        },
+    ];
     return (
         <>
             <div className="mb-2 flex items-center justify-between space-y-2">
