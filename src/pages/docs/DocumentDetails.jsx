@@ -21,6 +21,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchDocContents,
+    updateDocContent,
     // addDocContent,
     // updateDocContent,
     // deleteDocContent
@@ -138,9 +139,19 @@ const DocumentDetails = () => {
         }
     };
 
-    const handleUpdateSession = async () => {
+    const handleUpdateSession = () => {
         try {
-            // await dispatch(updateDocContent(editingSession)).unwrap();
+            console.log(editingSession);
+            const data = {
+                "@Id": editingSession.Id,
+                "@CourseId": editingSession.CourseId,
+                "@ParentId": editingSession.ParentId,
+                "@Title": editingSession.Title,
+                "@Description": editingSession.Description,
+                "@SortIndex": editingSession.SortIndex
+            }
+            console.log(data)
+            dispatch(updateDocContent(data));
             setEditingSession(null);
             toast.success("جلسه با موفقیت به‌روزرسانی شد");
         } catch (error) {

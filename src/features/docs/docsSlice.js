@@ -1,20 +1,22 @@
 // src/features/docs/docsSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchDocContents, fetchDocs } from './docsActions'
+import { createDoc, fetchDocById, fetchDocContents, fetchDocs } from './docsActions'
 
 const initialState = {
     docs: [],
     contents: [],
+    singleDoc: null,
     loading: false,
     error: null,
 }
+
 
 const docsSlice = createSlice({
     name: 'docs',
     initialState,
     reducers: {},
-    extraReducers: (builder) => {
+    extraReducers: builder => {
         builder
             .addCase(fetchDocs.pending, (state) => {
                 state.loading = true
@@ -28,8 +30,30 @@ const docsSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
-
-        builder
+            .addCase(fetchDocById.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchDocById.fulfilled, (state, action) => {
+                state.loading = false
+                state.singleDoc = action.payload
+            })
+            .addCase(fetchDocById.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(createDoc.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(createDoc.fulfilled, (state, action) => {
+                state.loading = false
+                // state.docs = action.payload
+            })
+            .addCase(createDoc.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
             .addCase(fetchDocContents.pending, (state) => {
                 state.loading = true
                 state.error = null

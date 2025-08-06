@@ -13,54 +13,25 @@ import { ArrowUpDown, MoreHorizontalIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDocs } from '../../features/docs/docsActions';
+import { minuteToHour } from '../../helper';
 
-// دیتاهای فیک برای فیلدهای غیر از title
-const fakeValues = [
-    {
-        instructor: "علی رضایی",
-        duration: 120,
-        episodes: 12,
-        status: "منتشر شده",
-        price: Math.floor(Math.random() * 4000000) + 1000000,
-    },
-    {
-        instructor: "زهرا حسینی",
-        duration: 200,
-        episodes: 20,
-        status: "منتشر شده",
-        price: Math.floor(Math.random() * 4000000) + 1000000,
-    },
-    {
-        instructor: "سعید کریمی",
-        duration: 95,
-        episodes: 10,
-        status: "پیش‌نویس",
-        price: Math.floor(Math.random() * 4000000) + 1000000,
-    },
-    {
-        instructor: "ندا عباسی",
-        duration: 180,
-        episodes: 18,
-        status: "منتشر شده",
-        price: Math.floor(Math.random() * 4000000) + 1000000,
-    },
-    {
-        instructor: "محمد احمدی",
-        duration: 240,
-        episodes: 24,
-        status: "پیش‌نویس",
-        price: Math.floor(Math.random() * 4000000) + 1000000,
-    },
-];
 
 const columns = [
     {
-        accessorKey: "id",
-        header: "ردیف",
-        cell: ({ row }) => <div className="text-center">{row.getValue("id")}</div>,
+        accessorKey: "SortIndex",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                ردیف
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+            </Button>
+        ),
+        cell: ({ row }) => <div className="text-center">{row.getValue("SortIndex")}</div>,
     },
     {
-        accessorKey: "title",
+        accessorKey: "Title",
         header: ({ column }) => (
             <Button
                 variant="ghost"
@@ -70,49 +41,62 @@ const columns = [
                 <ArrowUpDown className="mr-2 h-4 w-4" />
             </Button>
         ),
-        cell: ({ row }) => <div className="text-center">{row.getValue("title")}</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("Title")}</div>,
     },
     {
-        accessorKey: "instructor",
-        header: () => <div>مدرس</div>,
-        cell: ({ row }) => <div className="text-center">{row.getValue("instructor")}</div>,
+        accessorKey: "Summary",
+        header: () => <div>توضیحات</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("Summary")}</div>,
     },
     {
-        accessorKey: "duration",
+        accessorKey: "Duration",
         header: () => <div>مدت زمان</div>,
         cell: ({ row }) => (
-            <div className="text-center">{row.getValue("duration")} دقیقه</div>
+            <div className="text-center">{minuteToHour(row.getValue("Duration"))}</div>
         ),
     },
     {
-        accessorKey: "episodes",
-        header: () => <div>تعداد قسمت‌ها</div>,
+        accessorKey: "Lessons",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                تعداد دروس
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+            </Button>
+        ), cell: ({ row }) => (
+            <div className="text-center">{row.getValue("Lessons")} قسمت</div>
+        ),
+    },
+    {
+        accessorKey: "Level",
+        header: () => <div>سطح دوره</div>,
         cell: ({ row }) => (
-            <div className="text-center">{row.getValue("episodes")} قسمت</div>
+            <div className="text-center">{row.getValue("Level")}</div>
         ),
     },
     {
-        accessorKey: "price",
-        header: () => <div>قیمت</div>,
-        cell: ({ row }) => (
-            <div className="text-center">
-                {row.getValue("price").toLocaleString()} تومان
-            </div>
-        ),
-    },
-    {
-        accessorKey: "status",
-        header: () => <div>وضعیت</div>,
-        cell: ({ row }) => {
-            const status = row.getValue("status");
+        accessorKey: "Disabled",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                وضعیت
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+            </Button>
+        ), cell: ({ row }) => {
+            const disabled = row.getValue("Disabled");
+            console.log(disabled)
             return (
                 <span
-                    className={`px-2 py-1 rounded block mx-auto w-fit text-xs ${status === "منتشر شده"
+                    className={`px-2 py-1 rounded block mx-auto w-fit text-xs ${!disabled
                         ? "bg-green-200 text-green-800"
-                        : "bg-yellow-200 text-yellow-800"
+                        : "bg-red-200 text-red-800"
                         }`}
                 >
-                    {status}
+                    {!disabled ? "فعال" : "غیرفعال"}
                 </span>
             );
         },
@@ -136,14 +120,14 @@ const columns = [
                             <DropdownMenuLabel>عملیات</DropdownMenuLabel>
 
                             <DropdownMenuItem>
-                                <Link to={`/Documents/${doc.id}/exercises`}>تمرینات</Link>
+                                <Link to={`/Documents/${doc.Id}/exercises`}>تمرینات</Link>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                                <Link to={doc.id.toString()}>مشاهده</Link>
+                                <Link to={doc.Id.toString()}>مشاهده</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <Link to={`edit/${doc.id}`}>ویرایش</Link>
+                                <Link to={`edit/${doc.Id}`}>ویرایش</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>حذف</DropdownMenuItem>
                         </DropdownMenuContent>
@@ -160,18 +144,13 @@ const Documents = () => {
     const { docs, loading, error } = useSelector((state) => state.docs);
 
     useEffect(() => {
-        dispatch(fetchDocs({ "@Disabled": "false" }));
+        dispatch(fetchDocs({ "@PageSize": 20 }));
     }, [dispatch]);
 
     if (loading) return <p>در حال بارگذاری...</p>;
     if (error) return <p>خطا: {error}</p>;
 
     // تبدیل داده‌های واقعی به ساختار جدول با داده‌های فیک
-    const mergedData = docs.map((item, index) => ({
-        id: item.SortIndex,
-        title: item.Title,
-        ...fakeValues[index % fakeValues.length], // چرخش بین داده‌های فیک
-    }));
 
     return (
         <>
@@ -188,11 +167,11 @@ const Documents = () => {
             </div>
 
             <DataTable
-                data={mergedData}
+                data={docs}
                 columns={columns}
                 filters={[
                     {
-                        value: "title",
+                        value: "Title",
                         placeholder: "عنوان",
                     },
                 ]}

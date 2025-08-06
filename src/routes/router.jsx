@@ -26,6 +26,8 @@ import SubmittedQuizzes from '../pages/submited-quizzes/SubmittedQuizzes';
 import Certificates from '../pages/certificates/Certificates';
 import Documents from '../pages/docs/Documents';
 import DocumentDetails from '../pages/docs/DocumentDetails';
+import AddDocument from '../pages/docs/AddDocument';
+import EditDocument from '../pages/docs/EditDocument';
 
 export const router = createBrowserRouter([
     {
@@ -41,8 +43,16 @@ export const router = createBrowserRouter([
                 element: <Documents />
             },
             {
+                path: "/docs/new",
+                element: <AddDocument />
+            },
+            {
                 path: "/docs/:id",
                 element: <DocumentDetails />
+            },
+            {
+                path: "/docs/edit/:id",
+                element: <EditDocument />
             },
             {
                 path: "/courses",
