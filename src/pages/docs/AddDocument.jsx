@@ -40,30 +40,34 @@ const AddDocument = () => {
     };
 
     const handleSubmit = async (e) => {
-        console.log(formData)
+        e.preventDefault();
+
         const data = {
             "@Id": 0,
-            "@Title": formData.Title,
-            "@Summary": formData.Summary,
-            "@Description": formData.Description,
-            "@Level": formData.Level,
-            "@Features": formData.Features,
-            "@Disabled": formData.Disabled,
-            "@Prerequisites": formData.Prerequisites,
-            "@TargetAudience": formData.TargetAudience,
-            "@SortIndex": formData.SortIndex,
-            "@Price": "10"
-        }
-        e.preventDefault();
-        console.log(data)
+            "@Title": formData.Title?.trim() || '',
+            "@Summary": formData.Summary?.trim() || '',
+            "@Description": formData.Description?.trim() || '',
+            "@Level": formData.Level || '',
+            "@Features": formData.Features || '',
+            "@Disabled": formData.Disabled ?? false,
+            "@Prerequisites": formData.Prerequisites || '',
+            "@TargetAudience": formData.TargetAudience || '',
+            "@SortIndex": Number(formData.SortIndex) || 0,
+            "@Price": "10", // یا اینو هم از formData بگیر اگه متغیره
+        };
+
+        console.log("Submit Data:", data);
+
         try {
             await dispatch(createAndUpdateDoc(data)).unwrap();
             toast.success('مستند با موفقیت ایجاد شد');
             navigate('/docs');
         } catch (error) {
-            toast.error(`خطا در ایجاد مستند: ${error.message}`);
+            toast.error(`خطا در ایجاد مستند: ${error?.message || 'خطای ناشناخته'}`);
+            console.error("Error creating doc:", error);
         }
     };
+
 
     return (
         <div className=" mx-auto p-4 ">
@@ -210,7 +214,7 @@ const AddDocument = () => {
                     <Button
                         type="button"
                         variant="outline"
-                        onClick={() => navigate('/Documents')}
+                        onClick={() => navigate('/docs')}
                     >
                         لغو
                     </Button>
