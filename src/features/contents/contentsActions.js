@@ -2,12 +2,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { SP_fetch } from '../../services/api'
 
-export const fetchDocs = createAsyncThunk(
-    'docs/fetchDocs',
+export const fetchContents = createAsyncThunk(
+    'docs/fetchContents',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Report_Courses', parameters)
-            console.log(res.Data.Dataset)
+            const res = await SP_fetch('Report_Contents', parameters)
             return res.Data.Dataset
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message)
@@ -15,11 +14,11 @@ export const fetchDocs = createAsyncThunk(
     }
 )
 
-export const fetchDocById = createAsyncThunk(
-    'docs/fetchDocById',
+export const fetchContentById = createAsyncThunk(
+    'docs/fetchContentById',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Form_Courses', parameters)
+            const res = await SP_fetch('Form_Contents', parameters)
             console.log(res.Data.Dataset[0])
             return res.Data.Dataset[0]
         } catch (err) {
@@ -28,23 +27,24 @@ export const fetchDocById = createAsyncThunk(
     }
 )
 
-export const createAndUpdateDoc = createAsyncThunk(
-    'docs/createAndUpdateDoc',
+export const createAndUpdateContent = createAsyncThunk(
+    'docs/createAndUpdateContent',
     async (parameters, thunkAPI) => {
         try {
-            const res = await SP_fetch('Save_Courses', parameters)
+            const res = await SP_fetch('Save_Contents', parameters)
             console.log(res)
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message)
         }
     }
 )
-
-export const deleteDoc = createAsyncThunk(
-    'docs/deleteDoc',
+export const deleteContent = createAsyncThunk(
+    'docs/deleteContent',
     async (parameters, thunkAPI) => {
+
+        console.log(parameters)
         try {
-            const res = await SP_fetch('Delete_Courses', parameters)
+            const res = await SP_fetch('Delete_Contents', parameters)
             console.log(res)
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message)
