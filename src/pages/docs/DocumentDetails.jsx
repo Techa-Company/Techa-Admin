@@ -4,7 +4,6 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    CardDescription,
     CardContent,
     CardFooter
 } from '../../components/ui/card';
@@ -35,7 +34,8 @@ import {
     GripVertical,
     ArrowUpDown,
     Bookmark,
-    BookmarkPlus
+    BookmarkPlus,
+    Clock
 } from 'lucide-react';
 import { createAndUpdateContent, deleteContent, fetchContents } from '../../features/contents/contentsActions';
 import { minuteToHour } from '../../helper';
@@ -44,6 +44,7 @@ import Swal from 'sweetalert2';
 
 // React SortableJS imports
 import { ReactSortable } from "react-sortablejs";
+import { EditSession } from 'ace-builds';
 
 const DocumentDetails = () => {
     const { id } = useParams();
@@ -55,6 +56,8 @@ const DocumentDetails = () => {
     const [editingSession, setEditingSession] = useState(null);
     const [newChapter, setNewChapter] = useState(null);
     const [newSession, setNewSession] = useState(null);
+
+    console.log(contents)
 
     useEffect(() => {
         dispatch(fetchContents({
@@ -116,7 +119,7 @@ const DocumentDetails = () => {
             "@CourseId": id,
             "@Title": newChapter.Title,
             "@SortIndex": newChapter.SortIndex,
-            "Disabled": false,
+            "@Disabled": false,
             "@Price": 0
         };
 
@@ -135,8 +138,8 @@ const DocumentDetails = () => {
     };
 
     const handleAddSession = async (chapterId) => {
-        if (!newSession || !newSession.Title || newSession.SortIndex == null) {
-            toast.error("لطفاً عنوان و ترتیب جلسه را وارد کنید");
+        if (!newSession || !newSession.Title || newSession.SortIndex == null || !newSession.TimeToRead) {
+            toast.error("لطفاً موارد الزامی را وارد کنید");
             return;
         }
 
@@ -147,7 +150,8 @@ const DocumentDetails = () => {
             "@Title": newSession.Title,
             "@Description": newSession.Description,
             "@SortIndex": newSession.SortIndex,
-            "Disabled": false,
+            "@Disabled": false,
+            "@TimeToRead": newSession.TimeToRead,
             "@Price": 0
         };
 
@@ -176,7 +180,7 @@ const DocumentDetails = () => {
             "@CourseId": editingChapter.CourseId || id,
             "@Title": editingChapter.Title,
             "@SortIndex": editingChapter.SortIndex,
-            "Disabled": editingChapter.Disabled ?? false,
+            "@Disabled": editingChapter.Disabled ?? false,
             "@Price": editingChapter.Price || 0
         };
 
@@ -195,7 +199,7 @@ const DocumentDetails = () => {
     };
 
     const handleUpdateSession = async () => {
-        if (!editingSession || !editingSession.Id || !editingSession.Title) {
+        if (!editingSession || !editingSession.Id || !editingSession.Title, !editingSession.TimeToRead) {
             toast.error("لطفاً اطلاعات جلسه را کامل وارد کنید");
             return;
         }
@@ -206,8 +210,9 @@ const DocumentDetails = () => {
             "@ParentId": editingSession.ParentId,
             "@Title": editingSession.Title,
             "@Description": editingSession.Description,
-            "Disabled": editingSession.Disabled ?? false,
+            "@Disabled": editingSession.Disabled ?? false,
             "@SortIndex": editingSession.SortIndex,
+            "@TimeToRead": editingSession.TimeToRead,
             "@Price": editingSession.Price || 0
         };
 
@@ -365,7 +370,7 @@ const DocumentDetails = () => {
                     "@CourseId": item.CourseId || id,
                     "@Title": item.Title,
                     "@SortIndex": item.SortIndex,
-                    "Disabled": item.Disabled ?? false,
+                    "@Disabled": item.Disabled ?? false,
                     "@Price": item.Price || 0
                 } : {
                     "@Id": item.Id,
@@ -373,7 +378,7 @@ const DocumentDetails = () => {
                     "@ParentId": parentId,
                     "@Title": item.Title,
                     "@Description": item.Description,
-                    "Disabled": item.Disabled ?? false,
+                    "@Disabled": item.Disabled ?? false,
                     "@SortIndex": item.SortIndex,
                     "@Price": item.Price || 0
                 };
@@ -666,15 +671,15 @@ const DocumentDetails = () => {
                                     {/* New Session Form */}
                                     {newSession?.ParentId === chapter.Id && (
                                         <div className="mb-6 animate-fadeIn">
-                                            <Card className="border border-emerald-200 shadow-md">
-                                                <CardHeader className="bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
+                                            <Card className="border border-emerald-200 shadow-md pt-0">
+                                                <CardHeader className="pt-6 rounded-t-xl bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
                                                     <CardTitle className="flex items-center text-emerald-800">
                                                         <FileText className="h-5 w-5 ml-2" />
                                                         جلسه جدید
                                                     </CardTitle>
                                                 </CardHeader>
                                                 <CardContent className="pt-6">
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                                                         <div>
                                                             <Label htmlFor="session-title" className="text-gray-700 mb-2 block">عنوان جلسه</Label>
                                                             <Input
@@ -693,6 +698,16 @@ const DocumentDetails = () => {
                                                                 value={newSession.SortIndex}
                                                                 className="py-3 px-4 border-gray-300 focus:ring-2 focus:ring-emerald-300 focus:border-transparent"
                                                                 onChange={(e) => setNewSession({ ...newSession, SortIndex: parseInt(e.target.value) || 0 })}
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <Label htmlFor="timeToRead" className="text-gray-700 mb-2 block">زمان مطالعه <span className='text-red-500'>*</span></Label>
+                                                            <Input
+                                                                id="timeToRead"
+                                                                type="number"
+                                                                value={newSession.timeToRead}
+                                                                className="py-3 px-4 border-gray-300 focus:ring-2 focus:ring-emerald-300 focus:border-transparent"
+                                                                onChange={(e) => setNewSession({ ...newSession, timeToRead: parseInt(e.target.value) || 0 })}
                                                             />
                                                         </div>
                                                     </div>
@@ -788,22 +803,40 @@ const DocumentDetails = () => {
                                                             <div className="p-2 rounded-lg bg-gray-200 text-gray-700 ml-3 cursor-move drag-handle">
                                                                 <GripVertical className="h-4 w-4" />
                                                             </div>
+                                                            <div className='flex items-center gap-8'>
 
-                                                            {editingSession?.Id === session.Id ? (
-                                                                <Input
-                                                                    className="py-2 px-4 border border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-300"
-                                                                    value={editingSession.Title}
-                                                                    onChange={(e) => setEditingSession({ ...editingSession, Title: e.target.value })}
-                                                                />
-                                                            ) : (
-                                                                <CardTitle className="flex items-center text-gray-700">
-                                                                    <FileText className="h-4 w-4 ml-2 text-emerald-600" />
-                                                                    {session.Title}
-                                                                </CardTitle>
-                                                            )}
+                                                                {editingSession?.Id === session.Id ? (
+                                                                    <Input
+                                                                        className="py-2 px-4 border border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-300"
+                                                                        value={editingSession.Title}
+                                                                        onChange={(e) => setEditingSession({ ...editingSession, Title: e.target.value })}
+                                                                    />
+                                                                ) : (
+                                                                    <CardTitle className="flex items-center text-gray-700">
+                                                                        <FileText className="h-4 w-4 ml-2 text-emerald-600" />
+                                                                        {session.Title}
+                                                                    </CardTitle>
+                                                                )}
+                                                                <div>
+                                                                    {editingSession?.Id === session.Id ? (
+                                                                        <Input
+                                                                            type="number"
+                                                                            className="py-2 px-4 border border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-300"
+                                                                            value={editingSession.TimeToRead}
+                                                                            onChange={(e) => setEditingSession({ ...editingSession, TimeToRead: e.target.value })}
+                                                                        />
+                                                                    ) : (
+                                                                        <p className="flex items-center text-gray-700">
+                                                                            <Clock className="h-4 w-4 ml-2 text-emerald-600" />
+                                                                            زمان مطالعه :  {session.TimeToRead} دقیقه
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         </div>
 
                                                         <div className="flex space-x-2">
+
                                                             {editingSession?.Id === session.Id ? (
                                                                 <>
                                                                     <Button
