@@ -721,7 +721,7 @@ const DocumentDetails = () => {
                                                                     height: 400,
                                                                     menubar: true,
                                                                     plugins: 'code codesample link lists table emoticons image',
-                                                                    toolbar: 'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code',
+                                                                    toolbar: 'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code | noteBox warningBox dangerBox infoBox',
                                                                     skin: 'oxide-dark',
                                                                     content_css: 'dark',
                                                                     branding: false,
@@ -730,7 +730,7 @@ const DocumentDetails = () => {
                                                                     setup: (editor) => {
                                                                         const createBox = (type, text, color) => {
                                                                             editor.insertContent(`
-                                                                                <div class="custom-box ${type}" style="border-left: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
+                                                                                <div dir='rtl' class="custom-box ${type}" style="border-right: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
                                                                                     <strong>${text}:</strong> این متن را ویرایش کنید.
                                                                                 </div>
                                                                             `);
@@ -897,7 +897,7 @@ const DocumentDetails = () => {
                                                                         height: 400,
                                                                         menubar: true,
                                                                         plugins: 'code codesample link lists table emoticons image',
-                                                                        toolbar: 'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code',
+                                                                        toolbar: 'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code | noteBox warningBox dangerBox infoBox',
                                                                         skin: 'oxide-dark',
                                                                         content_css: 'dark',
                                                                         branding: false,
@@ -906,7 +906,7 @@ const DocumentDetails = () => {
                                                                         setup: (editor) => {
                                                                             const createBox = (type, text, color) => {
                                                                                 editor.insertContent(`
-                                                                                    <div class="custom-box ${type}" style="border-left: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
+                                                                                    <div dir='rtl' class="custom-box ${type}" style="border-right: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
                                                                                         <strong>${text}:</strong> این متن را ویرایش کنید.
                                                                                     </div>
                                                                                 `);

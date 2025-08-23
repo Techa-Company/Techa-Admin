@@ -120,6 +120,20 @@ export const sidelinks = [
     icon: <GraduationCap size={18} />,
   },
   {
+    title: "مدیریت کاربران",
+    label: "",
+    href: "",
+    icon: <Users size={18} />,
+    sub: [
+      {
+        title: "لیست کاربران",
+        label: "",
+        href: "/users",
+        icon: <IconHexagonNumber1 size={18} />,
+      },
+    ],
+  },
+  {
     title: "خرید ها",
     label: "",
     href: "/purchases",

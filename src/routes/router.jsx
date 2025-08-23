@@ -28,6 +28,7 @@ import Documents from '../pages/docs/Documents';
 import DocumentDetails from '../pages/docs/DocumentDetails';
 import AddDocument from '../pages/docs/AddDocument';
 import EditDocument from '../pages/docs/EditDocument';
+import Users from '../pages/users/Users';
 
 export const router = createBrowserRouter([
     {
@@ -143,6 +144,19 @@ export const router = createBrowserRouter([
                 path: "/students/:id/exercises/:id",
                 element: <StudentDetail />
             },
+
+            {
+                path: "/users",
+                element: <Users />
+            },
+            // {
+            //     path: "/users/:id",
+            //     element: <StudentDetail />
+            // },
+            // {
+            //     path: "/users/edit/:id",
+            //     element: <EditStudent />
+            // },
             {
                 path: "/purchases",
                 element: <Purchases />
