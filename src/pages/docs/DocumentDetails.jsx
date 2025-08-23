@@ -721,19 +721,36 @@ const DocumentDetails = () => {
                                                                     height: 400,
                                                                     menubar: true,
                                                                     plugins: 'code codesample link lists table emoticons image',
-                                                                    toolbar: 'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code | noteBox warningBox dangerBox infoBox',
+                                                                    toolbar:
+                                                                        'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code codesample | noteBox warningBox dangerBox infoBox',
                                                                     skin: 'oxide-dark',
                                                                     content_css: 'dark',
                                                                     branding: false,
                                                                     images_upload_url: 'postAcceptor.php',
                                                                     automatic_uploads: true,
+
+                                                                    // ✅ لیست زبان‌های Code Sample
+                                                                    codesample_languages: [
+                                                                        { text: 'HTML/XML', value: 'markup' },
+                                                                        { text: 'JavaScript', value: 'javascript' },
+                                                                        { text: 'React (JSX)', value: 'jsx' },
+                                                                        { text: 'SQL', value: 'sql' },
+                                                                        { text: 'CSS', value: 'css' },
+                                                                        { text: 'JSON', value: 'json' },
+                                                                        { text: 'Python', value: 'python' },
+                                                                        { text: 'Java', value: 'java' },
+                                                                        { text: 'C#', value: 'csharp' },
+                                                                        { text: 'C++', value: 'cpp' },
+                                                                    ],
+
                                                                     setup: (editor) => {
                                                                         const createBox = (type, text, color) => {
                                                                             editor.insertContent(`
-                                                                                <div dir='rtl' class="custom-box ${type}" style="border-right: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
-                                                                                    <strong>${text}:</strong> این متن را ویرایش کنید.
-                                                                                </div>
-                                                                            `);
+          <div dir='rtl' class="custom-box ${type}" 
+               style="border-right: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
+            <strong>${text}:</strong> این متن را ویرایش کنید.
+          </div>
+        `);
                                                                         };
 
                                                                         editor.ui.registry.addButton('noteBox', {
@@ -761,8 +778,11 @@ const DocumentDetails = () => {
                                                                         });
                                                                     }
                                                                 }}
-                                                                onEditorChange={(content) => setNewSession({ ...newSession, Description: content })}
+                                                                onEditorChange={(content) =>
+                                                                    setNewSession({ ...newSession, Description: content })
+                                                                }
                                                             />
+
                                                         </div>
                                                     </div>
                                                 </CardContent>

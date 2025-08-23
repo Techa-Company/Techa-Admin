@@ -9,7 +9,10 @@ import { UserNavbar } from './components/layout/UserNavbar'
 import { Header } from './components/layout/Header'
 import { Bounce, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'; // Import the default CSS
-
+import Prism from "prismjs";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-sql";
+import "prismjs/themes/prism.css";
 
 export default function App() {
   const [isCollapsed, setIsCollapsed] = useIsCollapsed()
