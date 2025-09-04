@@ -1,258 +1,370 @@
-import React, { useState, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "../../components/ui/button";
-import {
-    Select,
-    SelectTrigger,
-    SelectContent,
-    SelectItem,
-    SelectValue,
-} from "../../components/ui/select";
-import { Input } from "../../components/ui/input";
-import { Textarea } from "../../components/ui/textarea";
-
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
-
-const exercises = [
-    // ... داده‌ها مثل قبل
-];
-
-const coursesData = [
-    ...exercises.map((ex) => ({
-        course: ex.course,
-        chapter: ex.chapter,
-        session: ex.session,
-    })),
-];
-
-// ادیتور با React Ace
-const Editor = ({ value, onChange }) => (
-    <AceEditor
-        mode="javascript"
-        theme="github"
-        onChange={onChange}
-        value={value}
-        name="code_editor"
-        editorProps={{ $blockScrolling: true }}
-        width="100%"
-        height="200px"
-        setOptions={{
-            fontSize: 14,
-            showLineNumbers: true,
-            tabSize: 2,
-        }}
-    />
-);
+import React, { useEffect, useState } from 'react';
+import { Button } from '../../components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import AceEditor from 'react-ace';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { fetchDocs } from '../../features/docs/docsActions';
+import { fetchContents } from '../../features/contents/contentsActions';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/theme-monokai';
+import { toast } from 'react-toastify';
+import { createAndUpdateExercise, fetchExerciseById } from '../../features/exercises/exercisesActions';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
+import { Textarea } from '../../components/ui/textarea';
+import { Badge } from '../../components/ui/badge';
+import { Loader2, ArrowRight, Save } from 'lucide-react';
 
 const EditExercise = () => {
-    const { id } = useParams();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { id } = useParams();
+    const { singleExercise, loading } = useSelector(state => state.exercises);
 
-    const exercise = exercises.find((e) => e.id === Number(id));
+    const [coursesList, setCoursesList] = useState([]);
+    const [chaptersList, setChaptersList] = useState([]);
+    const [sessionsList, setSessionsList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFetchingChapters, setIsFetchingChapters] = useState(false);
+    const [isFetchingSessions, setIsFetchingSessions] = useState(false);
 
-    const [course, setCourse] = useState(exercise?.course || "");
-    const [chapter, setChapter] = useState(exercise?.chapter || "");
-    const [session, setSession] = useState(exercise?.session || "");
-    const [number, setNumber] = useState(exercise?.number || "");
-    const [title, setTitle] = useState(exercise?.title || "");
-    const [description, setDescription] = useState(exercise?.description || "");
-    const [code, setCode] = useState(exercise?.code || "");
-    const [level, setLevel] = useState(exercise?.level || "آسان");
+    const [selectedCourse, setSelectedCourse] = useState('');
+    const [selectedChapter, setSelectedChapter] = useState('');
+    const [selectedSession, setSelectedSession] = useState('');
 
-    const courseList = useMemo(
-        () => [...new Set(coursesData.map((c) => c.course))],
-        []
-    );
-    const chapterList = useMemo(
-        () =>
-            course
-                ? [
-                    ...new Set(
-                        coursesData
-                            .filter((c) => c.course === course)
-                            .map((c) => c.chapter)
-                    ),
-                ]
-                : [],
-        [course]
-    );
-    const sessionList = useMemo(
-        () =>
-            chapter
-                ? [
-                    ...new Set(
-                        coursesData
-                            .filter((c) => c.chapter === chapter)
-                            .map((c) => c.session)
-                    ),
-                ]
-                : [],
-        [chapter]
-    );
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [code, setCode] = useState('');
+    const [level, setLevel] = useState('0');
+    const [disabled, setDisabled] = useState('0');
+    const [sortIndex, setSortIndex] = useState(1);
 
-    const [errors, setErrors] = useState({});
+    const levels = [
+        { id: 0, name: 'آسان', color: 'bg-green-100 text-green-800' },
+        { id: 1, name: 'متوسط', color: 'bg-yellow-100 text-yellow-800' },
+        { id: 2, name: 'دشوار', color: 'bg-orange-100 text-orange-800' },
+        { id: 3, name: 'چالش‌برانگیز', color: 'bg-red-100 text-red-800' },
+    ];
 
-    if (!exercise) return <div className="p-4">تمرین پیدا نشد</div>;
+    // گرفتن اطلاعات تمرین
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchExerciseById({ "@Id": id }));
+        }
+    }, [id, dispatch]);
 
-    const handleSubmit = (e) => {
+    // پر کردن فرم در حالت ویرایش
+    useEffect(() => {
+        if (singleExercise) {
+            setTitle(singleExercise.Title || '');
+            setDescription(singleExercise.Description || '');
+            setCode(singleExercise.Code || '');
+            setLevel(singleExercise.Level?.toString() || '0');
+            setDisabled(singleExercise.Disabled?.toString() || '0');
+            setSortIndex(singleExercise.SortIndex || 1);
+            setSelectedCourse(singleExercise.CourseId?.toString() || '');
+            setSelectedChapter(singleExercise.SessionId?.toString() || '');
+            setSelectedSession(singleExercise.ContentId?.toString() || '');
+        }
+    }, [singleExercise]);
+
+    // گرفتن دوره‌ها
+    useEffect(() => {
+        const getCourses = async () => {
+            try {
+                setIsLoading(true);
+                const res = await dispatch(fetchDocs());
+                setCoursesList(res.payload || []);
+            } catch {
+                toast.error('خطا در دریافت دوره‌ها');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        getCourses();
+    }, [dispatch]);
+
+    // گرفتن سرفصل‌ها
+    useEffect(() => {
+        if (!selectedCourse) {
+            if (!singleExercise) {
+                setChaptersList([]);
+                setSessionsList([]);
+                setSelectedChapter('');
+                setSelectedSession('');
+            }
+            return;
+        }
+
+        const getChapters = async () => {
+            try {
+                setIsFetchingChapters(true);
+                const res = await dispatch(fetchContents({ CourseId: Number(selectedCourse) }));
+                const contents = res.payload || [];
+                setChaptersList(contents.filter(c => c.ParentId === null));
+            } catch {
+                toast.error('خطا در دریافت سرفصل‌ها');
+            } finally {
+                setIsFetchingChapters(false);
+            }
+        };
+        getChapters();
+    }, [selectedCourse, dispatch, singleExercise]);
+
+    // گرفتن جلسات
+    useEffect(() => {
+        if (!selectedChapter) {
+            if (!singleExercise) {
+                setSessionsList([]);
+                setSelectedSession('');
+            }
+            return;
+        }
+
+        const getSessions = async () => {
+            try {
+                setIsFetchingSessions(true);
+                const res = await dispatch(fetchContents({ ParentId: Number(selectedChapter) }));
+                setSessionsList(res.payload || []);
+            } catch {
+                toast.error('خطا در دریافت جلسات');
+            } finally {
+                setIsFetchingSessions(false);
+            }
+        };
+        getSessions();
+    }, [selectedChapter, dispatch, singleExercise]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newErrors = {};
-        if (!course) newErrors.course = "لطفا دوره را انتخاب کنید.";
-        if (!chapter) newErrors.chapter = "لطفا فصل را انتخاب کنید.";
-        if (!session) newErrors.session = "لطفا جلسه را انتخاب کنید.";
-        if (!number) newErrors.number = "شماره تمرین را وارد کنید.";
-        if (!title) newErrors.title = "عنوان تمرین را وارد کنید.";
+        if (!selectedCourse || !selectedChapter || !selectedSession || !title) {
+            toast.warning('لطفا همه فیلدهای ضروری را تکمیل کنید');
+            return;
+        }
 
-        setErrors(newErrors);
+        const data = {
+            "@Id": Number(id) || 0,
+            "@Title": title.trim(),
+            "@Description": description.trim(),
+            "@Level": Number(level),
+            "@ContentId": Number(selectedSession),
+            "@CourseId": Number(selectedCourse),
+            "@SessionId": Number(selectedChapter),
+            "@Disabled": Number(disabled),
+            "@Code": code || '',
+            "@SortIndex": Number(sortIndex) || 1,
+        };
 
-        if (Object.keys(newErrors).length > 0) return;
-
-        console.log({
-            id,
-            course,
-            chapter,
-            session,
-            number,
-            title,
-            description,
-            code,
-            level,
-        });
-        alert("تمرین با موفقیت ویرایش شد!");
-        navigate(-1);
+        try {
+            setIsLoading(true);
+            await dispatch(createAndUpdateExercise(data)).unwrap();
+            toast.success('تمرین با موفقیت ذخیره شد');
+            navigate('/exercises');
+        } catch (error) {
+            toast.error(`خطا در ذخیره تمرین: ${error?.message || 'خطای ناشناخته'}`);
+            console.error("Error saving exercise:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    return (
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-6">ویرایش تمرین</h1>
-
-            <label className="block mb-2">دوره</label>
-            <Select
-                value={course}
-                onValueChange={(val) => {
-                    setCourse(val);
-                    setChapter("");
-                    setSession("");
-                }}
-            >
-                <SelectTrigger className="w-full">
-                    <SelectValue placeholder="انتخاب دوره" />
-                </SelectTrigger>
-                <SelectContent>
-                    {courseList.map((c) => (
-                        <SelectItem key={c} value={c}>
-                            {c}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-            {errors.course && (
-                <p className="text-red-600 text-sm mt-1">{errors.course}</p>
-            )}
-
-            <label className="block mt-4 mb-2">فصل</label>
-            <Select
-                value={chapter}
-                disabled={!course}
-                onValueChange={(val) => {
-                    setChapter(val);
-                    setSession("");
-                }}
-            >
-                <SelectTrigger className="w-full">
-                    <SelectValue placeholder="انتخاب فصل" />
-                </SelectTrigger>
-                <SelectContent>
-                    {chapterList.map((ch) => (
-                        <SelectItem key={ch} value={ch}>
-                            {ch}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-            {errors.chapter && (
-                <p className="text-red-600 text-sm mt-1">{errors.chapter}</p>
-            )}
-
-            <label className="block mt-4 mb-2">جلسه</label>
-            <Select
-                value={session}
-                disabled={!chapter}
-                onValueChange={(val) => setSession(val)}
-            >
-                <SelectTrigger className="w-full">
-                    <SelectValue placeholder="انتخاب جلسه" />
-                </SelectTrigger>
-                <SelectContent>
-                    {sessionList.map((se) => (
-                        <SelectItem key={se} value={se}>
-                            {se}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-            {errors.session && (
-                <p className="text-red-600 text-sm mt-1">{errors.session}</p>
-            )}
-
-            <label className="block mt-4 mb-2">شماره تمرین</label>
-            <Input
-                type="number"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
-                required
-            />
-            {errors.number && (
-                <p className="text-red-600 text-sm mt-1">{errors.number}</p>
-            )}
-
-            <label className="block mt-4 mb-2">عنوان تمرین</label>
-            <Input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-            />
-            {errors.title && (
-                <p className="text-red-600 text-sm mt-1">{errors.title}</p>
-            )}
-
-            <label className="block mt-4 mb-2">توضیحات</label>
-            <Textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={5}
-            />
-
-            <label className="block mt-4 mb-2">کد (در صورت وجود)</label>
-            <Editor value={code} onChange={setCode} />
-
-            <label className="block mt-4 mb-2">سطح</label>
-            <Select value={level} onValueChange={setLevel}>
-                <SelectTrigger className="w-full">
-                    <SelectValue placeholder="انتخاب سطح" />
-                </SelectTrigger>
-                <SelectContent>
-                    {["آسان", "متوسط", "سخت"].map((lvl) => (
-                        <SelectItem key={lvl} value={lvl}>
-                            {lvl}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-
-            <div className="mt-6 flex justify-end gap-4">
-                <Button variant="outline" onClick={() => navigate(-1)}>
-                    انصراف
-                </Button>
-                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
-                    ذخیره تغییرات
-                </Button>
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                <span className="mr-2">در حال بارگذاری...</span>
             </div>
-        </form>
+        );
+    }
+
+    return (
+        <div className="max-w-4xl mx-auto p-4 md:p-6">
+            <div className="flex items-center mb-6">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/exercises')}
+                    className="flex items-center gap-1"
+                >
+                    <ArrowRight className="h-4 w-4 ml-1" />
+                    بازگشت
+                </Button>
+                <h1 className="text-2xl md:text-3xl font-bold text-center flex-1">
+                    {id ? 'ویرایش تمرین' : 'ایجاد تمرین جدید'}
+                </h1>
+            </div>
+
+            <Card className="shadow-lg border-0">
+                <CardHeader className="bg-slate-50 rounded-t-lg py-4">
+                    <CardTitle className="text-xl">مشخصات تمرین</CardTitle>
+                    <CardDescription>
+                        اطلاعات مربوط به تمرین را تکمیل کنید
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="p-5 md:p-6">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Selects */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* دوره */}
+                            <div className="space-y-2">
+                                <Label htmlFor="course">دوره *</Label>
+                                <Select value={selectedCourse} onValueChange={val => setSelectedCourse(val)}>
+                                    <SelectTrigger className="w-full">
+                                        {selectedCourse ? (
+                                            <Badge variant="outline" className="bg-blue-50">
+                                                {coursesList.find(c => c.Id === Number(selectedCourse))?.Title || 'انتخاب نشده'}
+                                            </Badge>
+                                        ) : <SelectValue placeholder="انتخاب دوره" />}
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {coursesList.map(c => (
+                                            <SelectItem key={c.Id} value={c.Id.toString()}>{c.Title}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            {/* سرفصل */}
+                            <div className="space-y-2">
+                                <Label htmlFor="chapter">سرفصل *</Label>
+                                <Select
+                                    value={selectedChapter}
+                                    onValueChange={val => setSelectedChapter(val)}
+                                    disabled={!selectedCourse || isFetchingChapters}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        {isFetchingChapters ? (
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        ) : selectedChapter ? (
+                                            <Badge variant="outline" className="bg-indigo-50">
+                                                {chaptersList.find(c => c.Id === Number(selectedChapter))?.Title || 'انتخاب نشده'}
+                                            </Badge>
+                                        ) : <SelectValue placeholder="انتخاب سرفصل" />}
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {chaptersList.map(ch => (
+                                            <SelectItem key={ch.Id} value={ch.Id.toString()}>{ch.Title}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            {/* جلسه */}
+                            <div className="space-y-2">
+                                <Label htmlFor="session">جلسه *</Label>
+                                <Select
+                                    value={selectedSession}
+                                    onValueChange={val => setSelectedSession(val)}
+                                    disabled={!selectedChapter || isFetchingSessions}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        {isFetchingSessions ? (
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        ) : selectedSession ? (
+                                            <Badge variant="outline" className="bg-purple-50">
+                                                {sessionsList.find(s => s.Id === Number(selectedSession))?.Title || 'انتخاب نشده'}
+                                            </Badge>
+                                        ) : <SelectValue placeholder="انتخاب جلسه" />}
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {sessionsList.map(s => (
+                                            <SelectItem key={s.Id} value={s.Id.toString()}>{s.Title}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        {/* سایر فیلدها */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="title">عنوان تمرین *</Label>
+                                <Input id="title" type="text" value={title} onChange={e => setTitle(e.target.value)} required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="sortIndex">شماره ترتیب</Label>
+                                <Input id="sortIndex" type="number" min="1" value={sortIndex}
+                                    onChange={e => setSortIndex(Number(e.target.value) || 1)} />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="description">توضیحات تمرین</Label>
+                            <Textarea id="description" rows={4} value={description}
+                                onChange={e => setDescription(e.target.value)} />
+                        </div>
+
+                        {/* Code Editor */}
+                        <div className="space-y-2" dir="ltr">
+                            <Label htmlFor="code">کد نمونه (اختیاری)</Label>
+                            <AceEditor
+                                mode="javascript"
+                                theme="monokai"
+                                value={code}
+                                onChange={setCode}
+                                name="code-editor"
+                                width="100%"
+                                height="200px"
+                                fontSize={14}
+                                setOptions={{ showLineNumbers: true, tabSize: 2, highlightActiveLine: true }}
+                            />
+                        </div>
+
+                        {/* سطح و وضعیت */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="level">سطح دشواری</Label>
+                                <Select value={level} onValueChange={val => setLevel(val)}>
+                                    <SelectTrigger><SelectValue placeholder="انتخاب سطح" /></SelectTrigger>
+                                    <SelectContent>
+                                        {levels.map(l => (
+                                            <SelectItem key={l.id} value={l.id.toString()}>
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-3 h-3 rounded-full ${l.color.split(' ')[0]}`} />
+                                                    <span>{l.name}</span>
+                                                </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="status">وضعیت</Label>
+                                <Select value={disabled} onValueChange={val => setDisabled(val)}>
+                                    <SelectTrigger><SelectValue placeholder="انتخاب وضعیت" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="0">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-3 h-3 rounded-full bg-green-500" />
+                                                <span>فعال</span>
+                                            </div>
+                                        </SelectItem>
+                                        <SelectItem value="1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-3 h-3 rounded-full bg-gray-400" />
+                                                <span>غیرفعال</span>
+                                            </div>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        {/* دکمه‌ها */}
+                        <div className="flex items-center justify-end gap-3 pt-4 border-t">
+                            <Button type="button" variant="outline" onClick={() => navigate('/exercises')}>انصراف</Button>
+                            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 flex items-center gap-1" disabled={isLoading}>
+                                {isLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> در حال ذخیره...</> :
+                                    <><Save className="h-4 w-4" /> ذخیره تغییرات</>}
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
     );
 };
 

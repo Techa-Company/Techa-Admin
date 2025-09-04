@@ -1,11 +1,11 @@
 // src/features/docs/exercisesSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchExercises } from './exercisesActions'
+import { createAndUpdateExercise, deleteExercise, fetchExerciseById, fetchExercises } from './exercisesActions'
 
 const initialState = {
     exercises: [],
-    singleExercises: null,
+    singleExercise: null,
     loading: false,
     error: null,
 }
@@ -29,42 +29,42 @@ const exercisesSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
-        // .addCase(fetchDocById.pending, (state) => {
-        //     state.loading = true
-        //     state.error = null
-        // })
-        // .addCase(fetchDocById.fulfilled, (state, action) => {
-        //     state.loading = false
-        //     state.singleDoc = action.payload
-        // })
-        // .addCase(fetchDocById.rejected, (state, action) => {
-        //     state.loading = false
-        //     state.error = action.payload
-        // })
-        // .addCase(createAndUpdateDoc.pending, (state) => {
-        //     state.loading = true
-        //     state.error = null
-        // })
-        // .addCase(createAndUpdateDoc.fulfilled, (state) => {
-        //     state.loading = false
-        //     // state.docs = action.payload
-        // })
-        // .addCase(createAndUpdateDoc.rejected, (state, action) => {
-        //     state.loading = false
-        //     state.error = action.payload
-        // })
-        // .addCase(deleteDoc.pending, (state) => {
-        //     state.loading = true
-        //     state.error = null
-        // })
-        // .addCase(deleteDoc.fulfilled, (state) => {
-        //     state.loading = false
-        //     // state.docs = action.payload
-        // })
-        // .addCase(deleteDoc.rejected, (state, action) => {
-        //     state.loading = false
-        //     state.error = action.payload
-        // })
+            .addCase(fetchExerciseById.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchExerciseById.fulfilled, (state, action) => {
+                state.loading = false
+                state.singleExercise = action.payload
+            })
+            .addCase(fetchExerciseById.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(createAndUpdateExercise.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(createAndUpdateExercise.fulfilled, (state) => {
+                state.loading = false
+                // state.docs = action.payload
+            })
+            .addCase(createAndUpdateExercise.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(deleteExercise.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(deleteExercise.fulfilled, (state) => {
+                state.loading = false
+                // state.docs = action.payload
+            })
+            .addCase(deleteExercise.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
     },
 })
 
