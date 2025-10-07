@@ -13,8 +13,12 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-              git branch: 'main',
-                  url: 'https://gitea.techa.me/techa-gitea-admin/Techa-Admin.git'
+                script {
+                    sh 'echo $PATH'
+                    sh 'which git || echo "git not found"'
+                }
+                git branch: 'main',
+                    url: 'https://gitea.techa.me/techa-gitea-admin/Techa-Admin.git'
             }
         }
 
