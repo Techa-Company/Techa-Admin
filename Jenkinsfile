@@ -11,12 +11,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone') {
+
+        stage('Requirments') 
+        {
             steps {
                 script {
                     sh 'echo $PATH'
                     sh 'which git || echo "git not found"'
                 }
+            }
+        }
+
+        stage('Clone') {
+            steps {
                 git branch: 'main',
                     url: 'https://gitea.techa.me/techa-gitea-admin/Techa-Admin.git'
             }
