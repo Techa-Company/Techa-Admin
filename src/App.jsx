@@ -7,6 +7,12 @@ import { Navbar } from './components/layout/Navbar'
 import { Search } from './components/layout/Search'
 import { UserNavbar } from './components/layout/UserNavbar'
 import { Header } from './components/layout/Header'
+import { Bounce, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'; // Import the default CSS
+import Prism from "prismjs";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-sql";
+import "prismjs/themes/prism.css";
 
 export default function App() {
   const [isCollapsed, setIsCollapsed] = useIsCollapsed()
@@ -27,6 +33,20 @@ export default function App() {
             <Outlet />
           </Layout.Body>
         </Layout>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          // eslint-disable-next-line no-undef
+          transition={Bounce}
+        />
       </div>
     </div>
   )

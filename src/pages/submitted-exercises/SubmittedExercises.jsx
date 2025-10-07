@@ -1,9 +1,8 @@
-import React from 'react';
 import { Button } from '../../components/ui/button';
 import { DataTable } from '../../components/common/DataTable';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
-import { ArrowUpDown, MoreHorizontalIcon } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { MoreHorizontalIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const data = [
     {
@@ -38,7 +37,6 @@ const data = [
     },
 ];
 
-
 const columns = [
     {
         accessorKey: "id",
@@ -48,7 +46,7 @@ const columns = [
     {
         accessorKey: "title",
         header: () => <div className="text-center">عنوان تمرین</div>,
-        cell: ({ row }) => <div className="text-center">{row.getValue("title")}</div>,
+        cell: ({ row }) => <Link to={row.getValue("id").toString()} className="text-center block">{row.getValue("title")}</Link>,
     },
     {
         accessorKey: "exerciseNumber",

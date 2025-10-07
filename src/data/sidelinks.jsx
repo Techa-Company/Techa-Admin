@@ -25,6 +25,21 @@ export const sidelinks = [
     icon: <LayoutDashboard size={18} />,
   },
   {
+    title: "مدیریت مستندات",
+    label: "",
+    href: "",
+    icon: <FolderKanban size={18} />,
+    sub: [
+
+      {
+        title: "لیست مستندات",
+        label: "",
+        href: "/docs",
+        icon: <IconHexagonNumber1 size={18} />,
+      },
+    ],
+  },
+  {
     title: "مدیریت دوره‌ها",
     label: "",
     href: "",
@@ -57,10 +72,16 @@ export const sidelinks = [
         icon: <IconHexagonNumber1 size={18} />,
       },
       {
-        title: "لیست تمرین ها",
+        title: "تمرینات ارسالی",
         label: "",
         href: "/submitted-exercises",
         icon: <IconHexagonNumber2 size={18} />,
+      },
+      {
+        title: "آزمون های ارسالی",
+        label: "",
+        href: "/submitted-quizzes",
+        icon: <IconHexagonNumber3 size={18} />,
       },
     ],
   },
@@ -85,36 +106,10 @@ export const sidelinks = [
     icon: <ClipboardCheck size={18} />,
     sub: [
       {
-        title: "ایجاد آزمون",
-        label: "",
-        href: "/quizzes/new",
-        icon: <IconHexagonNumber1 size={18} />,
-      },
-      {
         title: "لیست آزمون‌ها",
         label: "",
         href: "/quizzes",
-        icon: <IconHexagonNumber2 size={18} />,
-      },
-    ],
-  },
-  {
-    title: "محتوای آموزشی",
-    label: "",
-    href: "",
-    icon: <FolderKanban size={18} />,
-    sub: [
-      {
-        title: "ایجاد محتوا",
-        label: "",
-        href: "/contents/new",
         icon: <IconHexagonNumber1 size={18} />,
-      },
-      {
-        title: "لیست محتواها",
-        label: "",
-        href: "/contents",
-        icon: <IconHexagonNumber2 size={18} />,
       },
     ],
   },
@@ -123,6 +118,20 @@ export const sidelinks = [
     label: "",
     href: "/certificates",
     icon: <GraduationCap size={18} />,
+  },
+  {
+    title: "مدیریت کاربران",
+    label: "",
+    href: "",
+    icon: <Users size={18} />,
+    sub: [
+      {
+        title: "لیست کاربران",
+        label: "",
+        href: "/users",
+        icon: <IconHexagonNumber1 size={18} />,
+      },
+    ],
   },
   {
     title: "خرید ها",

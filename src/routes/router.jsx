@@ -11,7 +11,7 @@ import StudentDetail from '../pages/students/StudentDetail';
 import Categories from '../pages/course-categories/Categories';
 import AddCategory from '../pages/course-categories/AddCategories';
 import EditCategory from '../pages/course-categories/EditCategory';
-import SubmittedExercises from '../pages/submitted-exercises/Exercises';
+import SubmittedExercises from '../pages/submitted-exercises/SubmittedExercises';
 import CourseExercises from '../pages/course-exercises/CourseExercises';
 import Tickets from '../pages/tickets/Tickets';
 import TicketDetail from '../pages/tickets/TicketDetail';
@@ -19,6 +19,16 @@ import Purchases from '../pages/purchases/Purchases';
 import PurchaseDetails from '../pages/purchases/PurchaseDetails';
 import Quizzes from '../pages/quizzes/Quizzes';
 import QuizDetails from '../pages/quizzes/QuizDetails';
+import AddExercise from '../pages/course-exercises/AddExercise';
+import EditExercise from '../pages/course-exercises/EditExercise';
+import SubmittedExerciseDetail from '../pages/submitted-exercises/SubmittedExerciseDetail';
+import SubmittedQuizzes from '../pages/submited-quizzes/SubmittedQuizzes';
+import Certificates from '../pages/certificates/Certificates';
+import Documents from '../pages/docs/Documents';
+import DocumentDetails from '../pages/docs/DocumentDetails';
+import AddDocument from '../pages/docs/AddDocument';
+import EditDocument from '../pages/docs/EditDocument';
+import Users from '../pages/users/Users';
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +38,22 @@ export const router = createBrowserRouter([
             {
                 path: "/",
                 element: <Dashboard />
+            },
+            {
+                path: "/docs",
+                element: <Documents />
+            },
+            {
+                path: "/docs/new",
+                element: <AddDocument />
+            },
+            {
+                path: "/docs/:id",
+                element: <DocumentDetails />
+            },
+            {
+                path: "/docs/edit/:id",
+                element: <EditDocument />
             },
             {
                 path: "/courses",
@@ -99,6 +125,18 @@ export const router = createBrowserRouter([
                 element: <SubmittedExercises />
             },
             {
+                path: "/submitted-exercises/:id",
+                element: <SubmittedExerciseDetail />
+            },
+            {
+                path: "/submitted-quizzes",
+                element: <SubmittedQuizzes />
+            },
+            {
+                path: "/submitted-quizzes/:id",
+                element: <SubmittedExerciseDetail />
+            },
+            {
                 path: "/students/:id/exercises",
                 element: <StudentDetail />
             },
@@ -106,6 +144,19 @@ export const router = createBrowserRouter([
                 path: "/students/:id/exercises/:id",
                 element: <StudentDetail />
             },
+
+            {
+                path: "/users",
+                element: <Users />
+            },
+            // {
+            //     path: "/users/:id",
+            //     element: <StudentDetail />
+            // },
+            // {
+            //     path: "/users/edit/:id",
+            //     element: <EditStudent />
+            // },
             {
                 path: "/purchases",
                 element: <Purchases />
@@ -113,6 +164,18 @@ export const router = createBrowserRouter([
             {
                 path: "/purchases/:id",
                 element: <PurchaseDetails />
+            },
+            {
+                path: "/exercises",
+                element: <CourseExercises />
+            },
+            {
+                path: "/exercises/new",
+                element: <AddExercise />
+            },
+            {
+                path: "/exercises/:id/edit",
+                element: <EditExercise />
             },
             {
                 path: "/quizzes",
@@ -129,6 +192,10 @@ export const router = createBrowserRouter([
             {
                 path: "/tickets/:id",
                 element: <TicketDetail />
+            },
+            {
+                path: "/certificates",
+                element: <Certificates />
             },
         ]
     },
