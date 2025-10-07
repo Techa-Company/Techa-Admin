@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm install'
+                        sh 'sudo pnpm install'
                     } catch (err) {
                         error("Install failed: ${err}")
                     }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm run dev'
+                        sh 'sudo pnpm run dev'
                         echo 'Run completed successfully ✅'
                     } catch (err) {
                         error("Run failed ❌: ${err}")
