@@ -26,7 +26,7 @@ const Documents = () => {
     const { docs, loading, error } = useSelector((state) => state.docs);
 
     useEffect(() => {
-        dispatch(fetchDocs({ "@PageSize": 20 }));
+        dispatch(fetchDocs({ "PageSize": 20, "Mode": "AdminCourses" }));
     }, [dispatch]);
 
     if (loading) return <p>در حال بارگذاری...</p>;
@@ -48,7 +48,7 @@ const Documents = () => {
             if (createAndUpdateDoc.fulfilled.match(resultAction)) {
                 toast.success('تغییر وضعیت مستند انجام شد');
                 // Reload docs to reflect new state
-                dispatch(fetchDocs({ "@PageSize": 20 }));
+                dispatch(fetchDocs({ "PageSize": 20, "Mode": "AdminCourses" }));
             } else {
                 toast.error('خطا در تغییر وضعیت مستند');
             }
@@ -146,35 +146,23 @@ const Documents = () => {
             ),
         },
         {
-            accessorKey: "Level",
-            header: () => <div>سطح دوره</div>,
-            cell: ({ row }) => (
-                <div className="text-center">{row.getValue("Level")}</div>
-            ),
+            accessorKey: 'Level',
+            header: 'سطح',
+            cell: ({ row }) => {
+                const levels = { Beginner: ['مقدماتی', 'text-green-600'], Intermediate: ['متوسط', 'text-yellow-600'], Advanced: ['پیشرفته', 'text-red-600'], 3: ['چالش‌برانگیز', 'text-purple-600'] };
+                const [text, color] = levels[row.getValue('Level')] || ['نامشخص', 'text-gray-400'];
+                return <div className={`text-center font-bold ${color}`}>{text}</div>;
+            }
         },
         {
-            accessorKey: "Disabled",
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    وضعیت
-                    <ArrowUpDown className="mr-2 h-4 w-4" />
-                </Button>
-            ), cell: ({ row }) => {
-                const disabled = row.getValue("Disabled");
-                return (
-                    <span
-                        className={`px-2 py-1 rounded block mx-auto w-fit text-xs ${!disabled
-                            ? "bg-green-200 text-green-800"
-                            : "bg-red-200 text-red-800"
-                            }`}
-                    >
-                        {!disabled ? "فعال" : "غیرفعال"}
-                    </span>
-                );
-            },
+            accessorKey: 'Disabled',
+            header: 'وضعیت',
+            cell: ({ row }) => {
+                const val = row.getValue('Disabled');
+                const text = val ? 'غیرفعال' : 'فعال';
+                const bg = val ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
+                return <span className={`py-1 rounded-sm text-center block mx-auto text-sm font-medium ${bg}`}>{text}</span>;
+            }
         },
         {
             id: "actions",

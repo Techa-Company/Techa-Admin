@@ -51,3 +51,16 @@ export const deleteExercise = createAsyncThunk(
         }
     }
 )
+
+export const sendExercise = createAsyncThunk(
+    'docs/sendExercise',
+    async (parameters, thunkAPI) => {
+        try {
+            const res = await SP_fetch('Save_UserExerciseProgresses', parameters)
+            console.log(res.Data.Dataset)
+            return res.Data.Dataset
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.message)
+        }
+    }
+)
