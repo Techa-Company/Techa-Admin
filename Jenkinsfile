@@ -11,10 +11,21 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Requirments') 
+        {
+            steps {
+                script {
+                    sh 'echo $PATH'
+                    sh 'which git || echo "git not found"'
+                }
+            }
+        }
+
         stage('Clone') {
             steps {
-              git branch: 'main',
-                  url: 'https://gitea.techa.me/techa-gitea-admin/Techa-Admin.git'
+                git branch: 'main',
+                    url: 'https://gitea.techa.me/techa-gitea-admin/Techa-Admin.git'
             }
         }
 
@@ -22,7 +33,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm install'
+                        sh 'sudo pnpm install'
                     } catch (err) {
                         error("Install failed: ${err}")
                     }
@@ -34,7 +45,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'npm run dev'
+                        sh 'sudo pnpm run dev'
                         echo 'Run completed successfully ✅'
                     } catch (err) {
                         error("Run failed ❌: ${err}")
