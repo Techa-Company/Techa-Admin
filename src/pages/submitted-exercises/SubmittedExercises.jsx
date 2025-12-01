@@ -16,9 +16,10 @@ import {
     createAndUpdateExercise,
     deleteExercise,
     fetchExercises,
+    fetchSubmittedExercises,
 } from '../../features/exercises/exercisesActions';
-import { fetchDocs } from '../../features/docs/docsActions';
-import { fetchContents } from '../../features/contents/contentsActions';
+import { fetchDocs, fetchDocsForDropdown } from '../../features/docs/docsActions';
+import { fetchContents, fetchContentsForDropdown } from '../../features/contents/contentsActions';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -26,7 +27,7 @@ import { toast } from 'react-toastify';
 const SubmittedExercises = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { exercises, loading, error } = useSelector((state) => state.exercises);
+    const { submittedExercises: exercises, loading, error } = useSelector((state) => state.exercises);
     console.log(exercises)
     // فیلترها
     const [courseFilter, setCourseFilter] = useState('');
@@ -40,7 +41,7 @@ const SubmittedExercises = () => {
 
     // گرفتن دوره‌ها
     useEffect(() => {
-        dispatch(fetchDocs()).then((res) => {
+        dispatch(fetchDocsForDropdown()).then((res) => {
             setCoursesList(res.payload || []);
         });
     }, [dispatch]);
@@ -55,14 +56,14 @@ const SubmittedExercises = () => {
             return;
         }
 
-        dispatch(fetchContents({ CourseId: courseFilter })).then((res) => {
+        dispatch(fetchContentsForDropdown({ CourseId: courseFilter })).then((res) => {
             const contents = res.payload || [];
             setChaptersList(contents.filter(c => c.ParentId === null));
             setSessionsList([]);
             setSessionFilter('');
         });
     }, [courseFilter, dispatch]);
-
+    console.log(exercises)
     // گرفتن جلسات وقتی سرفصل انتخاب شد
     useEffect(() => {
         if (!chapterFilter) {
@@ -71,39 +72,34 @@ const SubmittedExercises = () => {
             return;
         }
 
-        dispatch(fetchContents({ ParentId: chapterFilter })).then((res) => {
+        dispatch(fetchContentsForDropdown({ ParentId: chapterFilter })).then((res) => {
             setSessionsList(res.payload || []);
         });
     }, [chapterFilter, dispatch]);
 
     // واکشی تمرین‌ها
     useEffect(() => {
-        const params = { "@PageSize": 20 };
+        const params = {};
         if (courseFilter) params["@CourseId"] = courseFilter;
         if (chapterFilter) params["@SessionId"] = chapterFilter;
         if (sessionFilter) params["@ContentId"] = sessionFilter;
 
-        dispatch(fetchExercises(params));
+        dispatch(fetchSubmittedExercises(params));
     }, [dispatch, courseFilter, chapterFilter, sessionFilter]);
 
     const MySwal = withReactContent(Swal);
 
     const changeStatus = async (exercise) => {
         const data = {
-            "@Id": exercise.Id,
-            "@Title": exercise.Title,
-            "@SortIndex": exercise.SortIndex,
-            "@Disabled": !exercise.Disabled ? 1 : 0,
-            "@ContentId": exercise.ContentId,
-            "@CourseId": exercise.CourseId,
-            "@SessionId": exercise.SessionId
+            "@Id": exercise.Id, "@Disabled": !exercise.Disabled ? 1 : 0,
+
         };
 
         try {
             const resultAction = await dispatch(createAndUpdateExercise(data));
             if (createAndUpdateExercise.fulfilled.match(resultAction)) {
                 toast.success('تغییر وضعیت تمرین انجام شد');
-                dispatch(fetchExercises({ "@PageSize": 20 }));
+                dispatch(fetchSubmittedExercises());
             } else {
                 toast.error('خطا در تغییر وضعیت تمرین');
             }
@@ -130,7 +126,7 @@ const SubmittedExercises = () => {
             const resultAction = await dispatch(deleteExercise({ "@Id": id }));
             if (resultAction.type === deleteExercise.fulfilled.type) {
                 toast.success('تمرین با موفقیت حذف شد');
-                dispatch(fetchExercises({ "@PageSize": 20 }));
+                dispatch(fetchSubmittedExercises());
             } else {
                 toast.error('خطا در حذف تمرین');
             }
@@ -149,7 +145,7 @@ const SubmittedExercises = () => {
             accessorKey: 'Level',
             header: 'سطح',
             cell: ({ row }) => {
-                const levels = { 0: ['آسان', 'text-green-600'], 1: ['متوسط', 'text-yellow-600'], 2: ['دشوار', 'text-red-600'], 3: ['چالش‌برانگیز', 'text-purple-600'] };
+                const levels = { 1: ['آسان', 'text-green-600'], 2: ['متوسط', 'text-yellow-600'], 3: ['دشوار', 'text-red-600'], 4: ['چالش‌برانگیز', 'text-purple-600'] };
                 const [text, color] = levels[row.getValue('Level')] || ['نامشخص', 'text-gray-400'];
                 return <div className={`text-center font-bold ${color}`}>{text}</div>;
             }
@@ -160,9 +156,9 @@ const SubmittedExercises = () => {
             cell: ({ row }) => {
                 const val = row.getValue('UserStatus') ?? 0;
                 switch (val) {
-                    case 2: return <Check className="text-green-500 w-6 h-6 mx-auto" />;
-                    case 1: return <BookOpen className="text-yellow-500 w-6 h-6 mx-auto" />;
-                    case 3: return <X className="text-red-500 w-6 h-6 mx-auto" />;
+                    case 2: return <BookOpen className="text-yellow-500 w-6 h-6 mx-auto" />;
+                    case 3: return <Check className="text-green-500 w-6 h-6 mx-auto" />;
+                    case 4: return <X className="text-red-500 w-6 h-6 mx-auto" />;
                     default: return <Circle className="text-gray-400 w-6 h-6 mx-auto" strokeWidth={2} />;
                 }
             }
@@ -200,8 +196,8 @@ const SubmittedExercises = () => {
                                 <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontalIcon className="h-4 w-4" /></Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
-                                <DropdownMenuItem onClick={() => changeStatus(exercise)}>{exercise.Disabled ? 'فعال کردن' : 'غیرفعال کردن'}</DropdownMenuItem>
                                 <DropdownMenuItem><Link to={`${exercise.Id}`}>مشاهده</Link></DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => changeStatus(exercise)}>{exercise.Disabled ? 'فعال کردن' : 'غیرفعال کردن'}</DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="text-red-500" onClick={() => handleDeleteExercise(exercise.Id)}>حذف</DropdownMenuItem>
                             </DropdownMenuContent>

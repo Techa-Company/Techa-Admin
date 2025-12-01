@@ -174,7 +174,7 @@ export const router = createBrowserRouter([
                 element: <AddExercise />
             },
             {
-                path: "/exercises/:id/edit",
+                path: "/exercises/edit/:id",
                 element: <EditExercise />
             },
             {

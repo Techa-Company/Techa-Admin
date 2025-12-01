@@ -17,7 +17,7 @@ export async function SP_fetch(procedureName, parameters = {}, hasDataTable = tr
 
     const body = {
         ProcedureName: procedureName,
-        ProjectId: 1010,
+        ProjectId: 1016,
         HasDataTable: hasDataTable,
     };
 

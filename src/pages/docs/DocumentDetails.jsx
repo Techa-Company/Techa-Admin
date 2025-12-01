@@ -914,63 +914,337 @@ const DocumentDetails = () => {
                                                                     apiKey='v12ld4fyiekikay5d5tuv6j4578f6daxybv4qrm2a0oymp5j'
                                                                     value={editingSession.Description}
                                                                     init={{
-                                                                        height: 400,
+                                                                        height: 600,
                                                                         menubar: true,
-                                                                        plugins: 'code codesample link lists table emoticons image',
-                                                                        toolbar:
-                                                                            'undo redo | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright | bullist numlist | table | emoticons | image | code codesample | noteBox warningBox dangerBox infoBox',
-                                                                        skin: 'oxide-dark',
-                                                                        content_css: 'dark',
+                                                                        plugins: [
+                                                                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                                                                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                                                            'insertdatetime', 'media', 'table', 'code', 'codesample', 'help', 'wordcount',
+                                                                            'emoticons', 'directionality', 'template', 'quickbars', 'pagebreak', 'importcss'
+                                                                        ],
+                                                                        toolbar: `
+            undo redo | blocks | bold italic underline strikethrough | 
+            forecolor backcolor | alignleft aligncenter alignright alignjustify | 
+            bullist numlist outdent indent | table | 
+            emoticons | image media codesample | 
+            noteBox warningBox dangerBox infoBox successBox tipBox | 
+            learningObjectives exerciseBox | 
+            code | fullscreen preview | help |
+            ltr rtl | pagebreak template
+        `,
+                                                                        // ✅ تغییر به تم روشن
+                                                                        skin: 'oxide',
+                                                                        content_css: 'default',
                                                                         branding: false,
-                                                                        images_upload_url: 'postAcceptor.php',
-                                                                        automatic_uploads: true,
+                                                                        promotion: false,
+                                                                        resize: true,
+                                                                        image_advtab: true,
+                                                                        image_caption: true,
+                                                                        link_list: [
+                                                                            { title: 'صفحه اصلی', value: '/' },
+                                                                            { title: 'درباره ما', value: '/about' },
+                                                                            { title: 'تماس با ما', value: '/contact' }
+                                                                        ],
+                                                                        image_list: [
+                                                                            { title: 'تصویر نمونه ۱', value: 'https://via.placeholder.com/300x200' },
+                                                                            { title: 'تصویر نمونه ۲', value: 'https://via.placeholder.com/400x300' }
+                                                                        ],
+                                                                        templates: [
+                                                                            {
+                                                                                title: 'قالب درس آموزشی',
+                                                                                description: 'قالب استاندارد برای محتوای آموزشی',
+                                                                                content: `
+                    <h1>عنوان درس</h1>
+                    <div class="learning-objectives" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #3b82f6; padding: 20px; margin: 20px 0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <h3 style="color: #1e40af; margin-top: 0; display: flex; align-items: center; gap: 10px;">🎯 اهداف یادگیری</h3>
+                        <ul style="color: #374151;">
+                            <li>هدف اول یادگیری</li>
+                            <li>هدف دوم یادگیری</li>
+                            <li>هدف سوم یادگیری</li>
+                        </ul>
+                    </div>
+                    <h2>مقدمه</h2>
+                    <p>متن مقدمه...</p>
+                    <h2>محتوا</h2>
+                    <p>متن اصلی محتوا...</p>
+                `
+                                                                            }
+                                                                        ],
+
+                                                                        // ✅ تنظیمات پیشرفته برای زبان فارسی
+                                                                        directionality: 'rtl',
+                                                                        language: 'fa',
+                                                                        rtl_ui: true,
 
                                                                         // ✅ لیست زبان‌های Code Sample
                                                                         codesample_languages: [
                                                                             { text: 'HTML/XML', value: 'markup' },
                                                                             { text: 'JavaScript', value: 'javascript' },
                                                                             { text: 'React (JSX)', value: 'jsx' },
-                                                                            { text: 'SQL', value: 'sql' },
+                                                                            { text: 'TypeScript', value: 'typescript' },
                                                                             { text: 'CSS', value: 'css' },
-                                                                            { text: 'JSON', value: 'json' },
+                                                                            { text: 'SCSS', value: 'scss' },
+                                                                            { text: 'PHP', value: 'php' },
                                                                             { text: 'Python', value: 'python' },
                                                                             { text: 'Java', value: 'java' },
                                                                             { text: 'C#', value: 'csharp' },
                                                                             { text: 'C++', value: 'cpp' },
+                                                                            { text: 'SQL', value: 'sql' },
+                                                                            { text: 'JSON', value: 'json' }
                                                                         ],
 
+                                                                        // ✅ تنظیمات پیشرفته جدول
+                                                                        table_appearance_options: false,
+                                                                        table_advtab: true,
+                                                                        table_cell_advtab: true,
+                                                                        table_row_advtab: true,
+                                                                        table_class_list: [
+                                                                            { title: 'بدون استایل', value: '' },
+                                                                            { title: 'جدول راه‌راه', value: 'striped-table' },
+                                                                            { title: 'جدول حاشیه‌دار', value: 'bordered-table' },
+                                                                            { title: 'جدول جمع‌شونده', value: 'hover-table' }
+                                                                        ],
+
+                                                                        // ✅ تنظیمات آپلود تصویر
+                                                                        images_upload_url: '/api/upload',
+                                                                        images_upload_handler: async (blobInfo) => {
+                                                                            try {
+                                                                                const formData = new FormData();
+                                                                                formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+                                                                                const response = await fetch('/api/upload', {
+                                                                                    method: 'POST',
+                                                                                    body: formData
+                                                                                });
+
+                                                                                const data = await response.json();
+                                                                                return data.url;
+                                                                            } catch (error) {
+                                                                                return Promise.reject('خطا در آپلود تصویر');
+                                                                            }
+                                                                        },
+
+                                                                        // ✅ تنظیمات پیشرفته لینک
+                                                                        link_target_list: [
+                                                                            { title: 'همان صفحه', value: '' },
+                                                                            { title: 'صفحه جدید', value: '_blank' }
+                                                                        ],
+
+                                                                        // ✅ تنظیمات محتوای پیشرفته با تم روشن
+                                                                        content_style: `
+            body {
+                font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 16px;
+                line-height: 1.8;
+                color: #374151;
+                direction: rtl;
+                text-align: right;
+                background: #ffffff;
+            }
+            
+            /* استایل‌های جعبه‌های آموزشی */
+            .custom-box {
+                margin: 20px 0;
+                padding: 20px;
+                border-radius: 12px;
+                border-right: 4px solid;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            
+            .note { 
+                background: linear-gradient(135deg, #dbeafe, #eff6ff);
+                border-color: #3b82f6;
+            }
+            
+            .warning { 
+                background: linear-gradient(135deg, #fef3c7, #fffbeb);
+                border-color: #f59e0b;
+            }
+            
+            .danger { 
+                background: linear-gradient(135deg, #fee2e2, #fef2f2);
+                border-color: #ef4444;
+            }
+            
+            .info { 
+                background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+                border-color: #0ea5e9;
+            }
+            
+            .success { 
+                background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+                border-color: #22c55e;
+            }
+            
+            .tip { 
+                background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+                border-color: #10b981;
+            }
+            
+            /* استایل جدول‌ها */
+            table { 
+                width: 100%; 
+                border-collapse: collapse;
+                margin: 16px 0;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            
+            table td, table th { 
+                border: 1px solid #e5e7eb; 
+                padding: 12px; 
+                text-align: right; 
+            }
+            
+            table th { 
+                background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+                font-weight: 600;
+                color: #374151;
+            }
+            
+            .striped-table tbody tr:nth-child(even) { 
+                background-color: #f9fafb; 
+            }
+            
+            .bordered-table { 
+                border: 2px solid #e5e7eb; 
+            }
+            
+            .hover-table tbody tr:hover { 
+                background-color: #f3f4f6; 
+            }
+            
+            /* استایل کد */
+            pre {
+                background: #f8f9fa !important;
+                border: 1px solid #e9ecef !important;
+                border-radius: 8px !important;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            }
+            
+            code {
+                background: #f3f4f6 !important;
+                color: #dc2626 !important;
+                border: 1px solid #e5e7eb !important;
+            }
+            
+            /* استایل‌های عمومی */
+            h1, h2, h3, h4, h5, h6 {
+                color: #111827;
+                margin-top: 24px;
+                margin-bottom: 16px;
+            }
+            
+            h1 {
+                border-bottom: 3px solid #3b82f6;
+                padding-bottom: 8px;
+            }
+            
+            h2 {
+                border-bottom: 2px solid #6b7280;
+                padding-bottom: 6px;
+            }
+            
+            blockquote {
+                background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                border-right: 4px solid #3b82f6;
+                color: #374151;
+            }
+        `,
+
+                                                                        // ✅ Quickbars برای نوار ابزار سریع
+                                                                        quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
+                                                                        quickbars_insert_toolbar: 'quicktable image emoticons codesample',
+                                                                        quickbars_image_toolbar: 'alignleft aligncenter alignright | imageoptions',
+
                                                                         setup: (editor) => {
-                                                                            const createBox = (type, text, color) => {
+                                                                            // ✅ سیستم جعبه‌های آموزشی پیشرفته با تم روشن
+                                                                            const createBox = (type, text, color, icon) => {
                                                                                 editor.insertContent(`
-                                                                                <div dir='rtl' class="custom-box ${type}" 
-                                                                                    style="border-right: 4px solid ${color}; background-color: ${color}20; padding: 16px; border-radius: 8px; margin: 16px 0;">
-                                                                                    <strong>${text}:</strong> این متن را ویرایش کنید.
-                                                                                </div>
-                                                                            `);
+                    <div dir='rtl' class="custom-box ${type}" 
+                         style="border-right: 4px solid ${color}; background: linear-gradient(135deg, ${color}15, ${color}08); padding: 20px; border-radius: 12px; margin: 20px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <span style="font-size: 24px;">${icon}</span>
+                            <strong style="color: ${color}; font-size: 18px; font-weight: 600;">${text}</strong>
+                        </div>
+                        <div style="color: #374151; line-height: 1.8; font-size: 16px;">
+                            محتوای ${text} خود را اینجا بنویسید...
+                        </div>
+                    </div>
+                `);
                                                                             };
 
                                                                             editor.ui.registry.addButton('noteBox', {
-                                                                                icon: 'comment',
-                                                                                tooltip: 'نکته',
-                                                                                onAction: () => createBox('note', 'نکته', '#10B981')
+                                                                                icon: 'note',
+                                                                                tooltip: 'جعبه نکته',
+                                                                                onAction: () => createBox('note', 'نکته مهم', '#3b82f6', '📘')
                                                                             });
 
                                                                             editor.ui.registry.addButton('warningBox', {
                                                                                 icon: 'warning',
-                                                                                tooltip: 'هشدار',
-                                                                                onAction: () => createBox('warning', 'هشدار', '#F59E0B')
+                                                                                tooltip: 'جعبه هشدار',
+                                                                                onAction: () => createBox('warning', 'هشدار', '#f59e0b', '⚠️')
                                                                             });
 
                                                                             editor.ui.registry.addButton('dangerBox', {
                                                                                 icon: 'alert',
-                                                                                tooltip: 'خطر',
-                                                                                onAction: () => createBox('danger', 'خطر', '#EF4444')
+                                                                                tooltip: 'جعبه خطر',
+                                                                                onAction: () => createBox('danger', 'خطر', '#ef4444', '🚫')
                                                                             });
 
                                                                             editor.ui.registry.addButton('infoBox', {
                                                                                 icon: 'info',
-                                                                                tooltip: 'اطلاعات',
-                                                                                onAction: () => createBox('info', 'اطلاعات', '#3B82F6')
+                                                                                tooltip: 'جعبه اطلاعات',
+                                                                                onAction: () => createBox('info', 'اطلاعات', '#0ea5e9', 'ℹ️')
+                                                                            });
+
+                                                                            editor.ui.registry.addButton('successBox', {
+                                                                                icon: 'checkmark',
+                                                                                tooltip: 'جعبه موفقیت',
+                                                                                onAction: () => createBox('success', 'موفقیت', '#22c55e', '✅')
+                                                                            });
+
+                                                                            editor.ui.registry.addButton('tipBox', {
+                                                                                icon: 'light-bulb',
+                                                                                tooltip: 'جعبه نکته کاربردی',
+                                                                                onAction: () => createBox('tip', 'نکته کاربردی', '#10b981', '💡')
+                                                                            });
+
+                                                                            // ✅ افزودن دکمه‌های سفارشی برای المان‌های آموزشی
+                                                                            editor.ui.registry.addButton('learningObjectives', {
+                                                                                text: 'اهداف یادگیری',
+                                                                                tooltip: 'درج اهداف یادگیری',
+                                                                                onAction: () => {
+                                                                                    editor.insertContent(`
+                        <div dir='rtl' style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #3b82f6; padding: 24px; margin: 24px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);">
+                            <h3 style="color: #1e40af; margin-top: 0; display: flex; align-items: center; gap: 12px; font-size: 20px;">
+                                🎯 اهداف یادگیری این درس
+                            </h3>
+                            <ul style="color: #374151; padding-right: 24px; font-size: 16px; line-height: 1.8;">
+                                <li>هدف اول یادگیری</li>
+                                <li>هدف دوم یادگیری</li>
+                                <li>هدف سوم یادگیری</li>
+                            </ul>
+                        </div>
+                    `);
+                                                                                }
+                                                                            });
+
+                                                                            editor.ui.registry.addButton('exerciseBox', {
+                                                                                text: 'تمرین عملی',
+                                                                                tooltip: 'درج بخش تمرین عملی',
+                                                                                onAction: () => {
+                                                                                    editor.insertContent(`
+                        <div dir='rtl' style="background: linear-gradient(135deg, #fef7ed, #fffbeb); border: 2px solid #f59e0b; padding: 24px; margin: 24px 0; border-radius: 12px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);">
+                            <h4 style="color: #d97706; margin-top: 0; display: flex; align-items: center; gap: 12px; font-size: 18px;">
+                                📝 تمرین عملی
+                            </h4>
+                            <p style="color: #374151; margin-bottom: 16px; font-size: 16px; line-height: 1.8;">شرح تمرین را اینجا بنویسید...</p>
+                            <div style="background: white; padding: 16px; border-radius: 8px; border: 1px dashed #d97706; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <strong style="color: #b45309;">راهنمایی:</strong> نکات راهنما برای حل تمرین
+                            </div>
+                        </div>
+                    `);
+                                                                                }
                                                                             });
                                                                         }
                                                                     }}

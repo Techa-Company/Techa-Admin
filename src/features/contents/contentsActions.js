@@ -13,6 +13,17 @@ export const fetchContents = createAsyncThunk(
         }
     }
 )
+export const fetchContentsForDropdown = createAsyncThunk(
+    'docs/fetchContentsForDropdown',
+    async (parameters, thunkAPI) => {
+        try {
+            const res = await SP_fetch('Contents_Dropdown', parameters)
+            return res.Data.Dataset
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.message)
+        }
+    }
+)
 
 export const fetchContentById = createAsyncThunk(
     'docs/fetchContentById',

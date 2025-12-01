@@ -1,11 +1,13 @@
 // src/features/docs/exercisesSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { createAndUpdateExercise, deleteExercise, fetchExerciseById, fetchExercises } from './exercisesActions'
+import { createAndUpdateExercise, deleteExercise, fetchExerciseById, fetchExercises, fetchSubmittedExerciseById, fetchSubmittedExercises } from './exercisesActions'
 
 const initialState = {
     exercises: [],
+    submittedExercises: [],
     singleExercise: null,
+    singleSubmittedExercise: null,
     loading: false,
     error: null,
 }
@@ -29,6 +31,18 @@ const exercisesSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
+            .addCase(fetchSubmittedExercises.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchSubmittedExercises.fulfilled, (state, action) => {
+                state.loading = false
+                state.submittedExercises = action.payload
+            })
+            .addCase(fetchSubmittedExercises.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
             .addCase(fetchExerciseById.pending, (state) => {
                 state.loading = true
                 state.error = null
@@ -38,6 +52,18 @@ const exercisesSlice = createSlice({
                 state.singleExercise = action.payload
             })
             .addCase(fetchExerciseById.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(fetchSubmittedExerciseById.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchSubmittedExerciseById.fulfilled, (state, action) => {
+                state.loading = false
+                state.singleSubmittedExercise = action.payload
+            })
+            .addCase(fetchSubmittedExerciseById.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

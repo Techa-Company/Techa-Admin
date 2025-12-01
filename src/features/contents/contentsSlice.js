@@ -1,10 +1,11 @@
 // src/features/docs/contentsSlice.js
 
 import { createSlice } from '@reduxjs/toolkit'
-import { createAndUpdateContent, deleteContent, fetchContentById, fetchContents } from './contentsActions'
+import { createAndUpdateContent, deleteContent, fetchContentById, fetchContents, fetchContentsForDropdown } from './contentsActions'
 
 const initialState = {
     contents: [],
+    dropdown: [],
     singleContent: null,
     loading: false,
     error: null,
@@ -26,6 +27,18 @@ const contentsSlice = createSlice({
                 state.contents = action.payload
             })
             .addCase(fetchContents.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(fetchContentsForDropdown.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchContentsForDropdown.fulfilled, (state, action) => {
+                state.loading = false
+                state.dropdown = action.payload
+            })
+            .addCase(fetchContentsForDropdown.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

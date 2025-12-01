@@ -4,8 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import AceEditor from 'react-ace';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchDocs } from '../../features/docs/docsActions';
-import { fetchContents } from '../../features/contents/contentsActions';
+import { fetchDocs, fetchDocsForDropdown } from '../../features/docs/docsActions';
+import { fetchContents, fetchContentsForDropdown } from '../../features/contents/contentsActions';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
 import { toast } from 'react-toastify';
@@ -42,10 +42,10 @@ const EditExercise = () => {
     const [sortIndex, setSortIndex] = useState(1);
 
     const levels = [
-        { id: 0, name: 'آسان', color: 'bg-green-100 text-green-800' },
-        { id: 1, name: 'متوسط', color: 'bg-yellow-100 text-yellow-800' },
-        { id: 2, name: 'دشوار', color: 'bg-orange-100 text-orange-800' },
-        { id: 3, name: 'چالش‌برانگیز', color: 'bg-red-100 text-red-800' },
+        { id: 1, name: 'آسان', color: 'bg-green-100 text-green-800' },
+        { id: 2, name: 'متوسط', color: 'bg-yellow-100 text-yellow-800' },
+        { id: 3, name: 'دشوار', color: 'bg-orange-100 text-orange-800' },
+        { id: 4, name: 'چالش‌برانگیز', color: 'bg-red-100 text-red-800' },
     ];
 
     // گرفتن اطلاعات تمرین
@@ -75,7 +75,7 @@ const EditExercise = () => {
         const getCourses = async () => {
             try {
                 setIsLoading(true);
-                const res = await dispatch(fetchDocs());
+                const res = await dispatch(fetchDocsForDropdown());
                 setCoursesList(res.payload || []);
             } catch {
                 toast.error('خطا در دریافت دوره‌ها');
@@ -101,7 +101,7 @@ const EditExercise = () => {
         const getChapters = async () => {
             try {
                 setIsFetchingChapters(true);
-                const res = await dispatch(fetchContents({ CourseId: Number(selectedCourse) }));
+                const res = await dispatch(fetchContentsForDropdown({ CourseId: Number(selectedCourse) }));
                 const contents = res.payload || [];
                 setChaptersList(contents.filter(c => c.ParentId === null));
             } catch {
@@ -126,7 +126,7 @@ const EditExercise = () => {
         const getSessions = async () => {
             try {
                 setIsFetchingSessions(true);
-                const res = await dispatch(fetchContents({ ParentId: Number(selectedChapter) }));
+                const res = await dispatch(fetchContentsForDropdown({ ParentId: Number(selectedChapter) }));
                 setSessionsList(res.payload || []);
             } catch {
                 toast.error('خطا در دریافت جلسات');

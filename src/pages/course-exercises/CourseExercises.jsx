@@ -14,8 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAndUpdateExercise, deleteExercise, fetchExercises } from '../../features/exercises/exercisesActions';
-import { fetchDocs } from '../../features/docs/docsActions';
-import { fetchContents } from '../../features/contents/contentsActions';
+import { fetchDocs, fetchDocsForDropdown } from '../../features/docs/docsActions';
+import { fetchContents, fetchContentsForDropdown } from '../../features/contents/contentsActions';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -37,7 +37,7 @@ const CourseExercises = () => {
 
     // مرحله 1: گرفتن دوره‌ها
     useEffect(() => {
-        dispatch(fetchDocs()).then((res) => {
+        dispatch(fetchDocsForDropdown()).then((res) => {
             setCoursesList(res.payload || []);
         });
     }, [dispatch]);
@@ -52,7 +52,7 @@ const CourseExercises = () => {
             return;
         }
 
-        dispatch(fetchContents({ CourseId: courseFilter })).then((res) => {
+        dispatch(fetchContentsForDropdown({ CourseId: courseFilter })).then((res) => {
             const contents = res.payload || [];
             setChaptersList(contents.filter(c => c.ParentId === null));
             setSessionsList([]);
@@ -68,7 +68,7 @@ const CourseExercises = () => {
             return;
         }
 
-        dispatch(fetchContents({ ParentId: chapterFilter })).then((res) => {
+        dispatch(fetchContentsForDropdown({ ParentId: chapterFilter })).then((res) => {
             const contents = res.payload || [];
             setSessionsList(contents);
         });
@@ -76,7 +76,7 @@ const CourseExercises = () => {
 
     // گرفتن تمرین‌ها
     useEffect(() => {
-        const params = { "@PageSize": 10 };
+        const params = {};
 
         if (courseFilter) params["@CourseId"] = courseFilter;
         if (chapterFilter) params["@SessionId"] = chapterFilter;
@@ -89,12 +89,7 @@ const CourseExercises = () => {
     const changeStatus = async (exercise) => {
         const data = {
             "@Id": exercise.Id,
-            "@Title": exercise.Title,
-            "@SortIndex": exercise.SortIndex,
             "@Disabled": !exercise.Disabled ? 1 : 0,
-            "@ContentId": exercise.ContentId,
-            "@CourseId": exercise.CourseId,
-            "@SessionId": exercise.SessionId
         };
 
         console.log(exercise)
@@ -104,7 +99,7 @@ const CourseExercises = () => {
             if (createAndUpdateExercise.fulfilled.match(resultAction)) {
                 toast.success('تغییر وضعیت تمرین انجام شد');
                 // Reload docs to reflect new state
-                dispatch(fetchExercises({ "@PageSize": 20 }));
+                dispatch(fetchExercises());
             } else {
                 toast.error('خطا در تغییر وضعیت تمرین');
             }
@@ -138,7 +133,7 @@ const CourseExercises = () => {
 
             if (resultAction.type === deleteExercise.fulfilled.type) {
                 toast.success('تمرین با موفقیت حذف شد');
-                dispatch(fetchExercises({ "@PageSize": 20 }));
+                dispatch(fetchExercises());
             } else {
                 toast.error('خطا در حذف تمرین');
             }
@@ -180,10 +175,10 @@ const CourseExercises = () => {
             header: 'سطح',
             cell: ({ row }) => {
                 const levelStyles = {
-                    0: { text: 'آسان', color: 'green' },
-                    1: { text: 'متوسط', color: 'orange' },
-                    2: { text: 'دشوار', color: 'red' },
-                    3: { text: 'چالش‌برانگیز', color: 'purple' }
+                    1: { text: 'آسان', color: 'green' },
+                    2: { text: 'متوسط', color: 'orange' },
+                    3: { text: 'دشوار', color: 'red' },
+                    4: { text: 'چالش‌برانگیز', color: 'purple' }
                 };
                 const level = levelStyles[row.getValue('Level')] ?? { text: 'نامشخص', color: 'gray' };
                 return <div className="text-center" style={{ color: level.color, fontWeight: 'bold' }}>{level.text}</div>;

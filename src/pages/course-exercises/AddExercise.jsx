@@ -5,8 +5,8 @@ import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { fetchDocs } from '../../features/docs/docsActions';
-import { fetchContents } from '../../features/contents/contentsActions';
+import { fetchDocs, fetchDocsForDropdown } from '../../features/docs/docsActions';
+import { fetchContents, fetchContentsForDropdown } from '../../features/contents/contentsActions';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-monokai';
 import { toast } from 'react-toastify';
@@ -41,10 +41,10 @@ const AddExercise = () => {
     const [sortIndex, setSortIndex] = useState(1);
 
     const levels = [
-        { id: 0, name: 'آسان', color: 'bg-green-100 text-green-800' },
-        { id: 1, name: 'متوسط', color: 'bg-yellow-100 text-yellow-800' },
-        { id: 2, name: 'دشوار', color: 'bg-orange-100 text-orange-800' },
-        { id: 3, name: 'چالش‌برانگیز', color: 'bg-red-100 text-red-800' },
+        { id: 1, name: 'آسان', color: 'bg-green-100 text-green-800' },
+        { id: 2, name: 'متوسط', color: 'bg-yellow-100 text-yellow-800' },
+        { id: 3, name: 'دشوار', color: 'bg-orange-100 text-orange-800' },
+        { id: 4, name: 'چالش‌برانگیز', color: 'bg-red-100 text-red-800' },
     ];
 
     // گرفتن دوره‌ها
@@ -52,7 +52,7 @@ const AddExercise = () => {
         const getCourses = async () => {
             try {
                 setIsLoading(true);
-                const res = await dispatch(fetchDocs());
+                const res = await dispatch(fetchDocsForDropdown());
                 setCoursesList(res.payload || []);
             } catch (error) {
                 toast.error('خطا در دریافت دوره‌ها');
@@ -76,7 +76,7 @@ const AddExercise = () => {
         const getChapters = async () => {
             try {
                 setIsFetchingChapters(true);
-                const res = await dispatch(fetchContents({ CourseId: selectedCourse }));
+                const res = await dispatch(fetchContentsForDropdown({ CourseId: selectedCourse }));
                 const contents = res.payload || [];
                 setChaptersList(contents.filter(c => c.ParentId === null));
                 setSessionsList([]);
@@ -103,7 +103,7 @@ const AddExercise = () => {
         const getSessions = async () => {
             try {
                 setIsFetchingSessions(true);
-                const res = await dispatch(fetchContents({ ParentId: selectedChapter }));
+                const res = await dispatch(fetchContentsForDropdown({ ParentId: selectedChapter }));
                 const contents = res.payload || [];
                 setSessionsList(contents);
                 setSelectedSession('');
