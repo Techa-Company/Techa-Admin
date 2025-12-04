@@ -7,8 +7,8 @@ export const fetchUsers = createAsyncThunk(
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('Report_Users', parameters)
-            console.log(res.Data.Dataset)
-            return res.Data.Dataset
+            console.log(res.Data)
+            return res.Data
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message)
         }
@@ -20,8 +20,8 @@ export const fetchDocById = createAsyncThunk(
     async (parameters, thunkAPI) => {
         try {
             const res = await SP_fetch('Form_Courses', parameters)
-            console.log(res.Data.Dataset[0])
-            return res.Data.Dataset[0]
+            console.log(res.Data[0])
+            return res.Data[0]
         } catch (err) {
             return thunkAPI.rejectWithValue(err.message)
         }
