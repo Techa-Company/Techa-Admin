@@ -61,8 +61,8 @@ const DocumentDetails = () => {
 
     useEffect(() => {
         dispatch(fetchContents({
-            "@CourseId": id,
-            "@GetAll": true,
+            CourseId: id,
+            Take: 1000
         }));
     }, [dispatch, id]);
 
@@ -128,7 +128,7 @@ const DocumentDetails = () => {
             setNewChapter(null);
             dispatch(fetchContents({
                 "@CourseId": id,
-                "@GetAll": true,
+                Take: 1000
             }));
             toast.success("سرفصل با موفقیت اضافه شد");
         } catch (error) {
@@ -160,7 +160,7 @@ const DocumentDetails = () => {
             setNewSession(null);
             dispatch(fetchContents({
                 "@CourseId": id,
-                "@GetAll": true,
+                Take: 1000
             }));
             toast.success("جلسه با موفقیت اضافه شد");
         } catch (error) {
@@ -189,7 +189,7 @@ const DocumentDetails = () => {
             setEditingChapter(null);
             dispatch(fetchContents({
                 "@CourseId": id,
-                "@GetAll": true,
+                Take: 1000
             }));
             toast.success("سرفصل با موفقیت به‌روزرسانی شد");
         } catch (error) {
@@ -222,7 +222,7 @@ const DocumentDetails = () => {
             toast.success("جلسه با موفقیت به‌روزرسانی شد");
             dispatch(fetchContents({
                 "@CourseId": id,
-                "@GetAll": true,
+                Take: 1000
             }));
         } catch (error) {
             console.error("Error updating session:", error);
@@ -264,7 +264,7 @@ const DocumentDetails = () => {
                 toast.success('سرفصل با موفقیت حذف شد');
                 dispatch(fetchContents({
                     "@CourseId": id,
-                    "@GetAll": true,
+                    Take: 1000
                 }));
             } else {
                 toast.error('خطا در حذف سرفصل');
@@ -300,7 +300,7 @@ const DocumentDetails = () => {
                 toast.success("جلسه با موفقیت حذف شد");
                 dispatch(fetchContents({
                     "@CourseId": id,
-                    "@GetAll": true,
+                    Take: 1000
                 }));
             } else {
                 toast.error("خطا در حذف جلسه");
@@ -391,7 +391,7 @@ const DocumentDetails = () => {
 
             dispatch(fetchContents({
                 "@CourseId": id,
-                "@GetAll": true,
+                Take: 1000
             }));
 
         } catch (error) {

@@ -26,7 +26,7 @@ const Documents = () => {
     const { docs, loading, error } = useSelector((state) => state.docs);
 
     useEffect(() => {
-        dispatch(fetchDocs({ "PageSize": 20, "Mode": "AdminCourses" }));
+        dispatch(fetchDocs({ Take: 20 }));
     }, [dispatch]);
 
     if (loading) return <p>در حال بارگذاری...</p>;
