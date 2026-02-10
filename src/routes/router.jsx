@@ -29,6 +29,8 @@ import DocumentDetails from '../pages/docs/DocumentDetails';
 import AddDocument from '../pages/docs/AddDocument';
 import EditDocument from '../pages/docs/EditDocument';
 import Users from '../pages/users/Users';
+import Reviews from '../pages/reviews/Reviews';
+import ReviewDetails from '../pages/reviews/ReviewDetails';
 
 export const router = createBrowserRouter([
     {
@@ -184,6 +186,14 @@ export const router = createBrowserRouter([
             {
                 path: "/quizzes/:id",
                 element: <QuizDetails />
+            },
+            {
+                path: "/reviews",
+                element: <Reviews />
+            },
+            {
+                path: "/reviews/:id",
+                element: <ReviewDetails />
             },
             {
                 path: "/tickets",

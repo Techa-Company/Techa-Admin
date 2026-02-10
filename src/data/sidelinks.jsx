@@ -142,8 +142,22 @@ export const sidelinks = [
   {
     title: "پیام‌ها",
     label: "",
-    href: "/tickets",
+    href: "",
     icon: <Mail size={18} />,
+    sub: [
+      {
+        title: "نظرات مستندات",
+        label: "",
+        href: "/reviews",
+        icon: <IconHexagonNumber1 size={18} />,
+      },
+      {
+        title: "تیکت ها",
+        label: "",
+        href: "/tickets",
+        icon: <IconHexagonNumber2 size={18} />,
+      },
+    ],
   },
   {
     title: "تنظیمات",
