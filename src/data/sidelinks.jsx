@@ -15,6 +15,7 @@ import {
   Settings,
   FolderKanban,
   ShoppingBag,
+  MessageCircle,
 } from "lucide-react";
 
 export const sidelinks = [
@@ -27,17 +28,17 @@ export const sidelinks = [
   {
     title: "مدیریت مستندات",
     label: "",
-    href: "",
+    href: "/docs",
     icon: <FolderKanban size={18} />,
-    sub: [
+    // sub: [
 
-      {
-        title: "لیست مستندات",
-        label: "",
-        href: "/docs",
-        icon: <IconHexagonNumber1 size={18} />,
-      },
-    ],
+    //   {
+    //     title: "لیست مستندات",
+    //     label: "",
+    //     href: "/docs",
+    //     icon: <IconHexagonNumber1 size={18} />,
+    //   },
+    // ],
   },
   {
     title: "مدیریت دوره‌ها",
@@ -88,30 +89,30 @@ export const sidelinks = [
   {
     title: "مدیریت تمرین ها",
     label: "",
-    href: "",
+    href: "/exercises",
     icon: <ClipboardCheck size={18} />,
-    sub: [
-      {
-        title: "لیست تمرین ها",
-        label: "",
-        href: "/exercises",
-        icon: <IconHexagonNumber1 size={18} />,
-      },
-    ],
+    // sub: [
+    //   {
+    //     title: "لیست تمرین ها",
+    //     label: "",
+    //     href: "/exercises",
+    //     icon: <IconHexagonNumber1 size={18} />,
+    //   },
+    // ],
   },
   {
     title: "آزمون‌ها",
     label: "",
-    href: "",
+    href: "/quizzes",
     icon: <ClipboardCheck size={18} />,
-    sub: [
-      {
-        title: "لیست آزمون‌ها",
-        label: "",
-        href: "/quizzes",
-        icon: <IconHexagonNumber1 size={18} />,
-      },
-    ],
+    // sub: [
+    //   {
+    //     title: "لیست آزمون‌ها",
+    //     label: "",
+    //     href: "/quizzes",
+    //     icon: <IconHexagonNumber1 size={18} />,
+    //   },
+    // ],
   },
   {
     title: "مدیریت گواهینامه‌ها",
@@ -138,6 +139,12 @@ export const sidelinks = [
     label: "",
     href: "/purchases",
     icon: <ShoppingBag size={18} />,
+  },
+  {
+    title: "پرسش و پاسخ ها",
+    label: "",
+    href: "/questions",
+    icon: <MessageCircle size={18} />,
   },
   {
     title: "پیام‌ها",

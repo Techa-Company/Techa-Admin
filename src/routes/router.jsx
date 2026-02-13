@@ -31,6 +31,8 @@ import EditDocument from '../pages/docs/EditDocument';
 import Users from '../pages/users/Users';
 import Reviews from '../pages/reviews/Reviews';
 import ReviewDetails from '../pages/reviews/ReviewDetails';
+import Questions from '../pages/questions/Questions';
+import QuestionDetails from '../pages/questions/QuestionDetails';
 
 export const router = createBrowserRouter([
     {
@@ -186,6 +188,14 @@ export const router = createBrowserRouter([
             {
                 path: "/quizzes/:id",
                 element: <QuizDetails />
+            },
+            {
+                path: "/questions",
+                element: <Questions />
+            },
+            {
+                path: "/questions/:id",
+                element: <QuestionDetails />
             },
             {
                 path: "/reviews",

@@ -4,6 +4,7 @@ import docsReducer from '../features/docs/docsSlice'
 import contentsReducer from '../features/contents/contentsSlice'
 import exercisesReducer from '../features/exercises/exercisesSlice'
 import reviewsReducer from '../features/reviews/reviewsSlice'
+import questionsReducer from '../features/questions/questionsSlice'
 import usersReducer from '../features/users/usersSlice'
 
 export const store = configureStore({
@@ -13,5 +14,6 @@ export const store = configureStore({
         exercises: exercisesReducer,
         users: usersReducer,
         reviews: reviewsReducer,
+        questions: questionsReducer,
     },
 })
