@@ -33,190 +33,202 @@ import Reviews from '../pages/reviews/Reviews';
 import ReviewDetails from '../pages/reviews/ReviewDetails';
 import Questions from '../pages/questions/Questions';
 import QuestionDetails from '../pages/questions/QuestionDetails';
+import Login from '../pages/auth/Login';
+import RequireAuth from '../components/auth/RequireAuth';
 
 export const router = createBrowserRouter([
     {
+        path: "/login",
+        element: <Login />,
+    },
+    {
         path: "/",
-        element: <App />,
+        element: <RequireAuth />,
         children: [
             {
                 path: "/",
-                element: <Dashboard />
-            },
-            {
-                path: "/docs",
-                element: <Documents />
-            },
-            {
-                path: "/docs/new",
-                element: <AddDocument />
-            },
-            {
-                path: "/docs/:id",
-                element: <DocumentDetails />
-            },
-            {
-                path: "/docs/edit/:id",
-                element: <EditDocument />
-            },
-            {
-                path: "/courses",
-                element: <Courses />
-            },
-            {
-                path: "/courses/new",
-                element: <AddCourse />
-            },
-            {
-                path: "/courses/edit/:id",
-                element: <EditCourse />
-            },
-            {
-                path: "/courses/:id/exercises",
-                element: <CourseExercises />
-            },
-            {
-                path: "/courses/:id/exercises/:id",
-                element: <EditCourse />
-            },
-            {
-                path: "/courses/:id/exercises/new",
-                element: <EditCourse />
-            },
-            {
-                path: "/courses/:id/exercises/:id/edit",
-                element: <EditCourse />
-            },
-            {
-                path: "/course-categories",
-                element: <Categories />
-            },
-            {
-                path: "/course-categories/new",
-                element: <AddCategory />
-            },
-            {
-                path: "/course-categories/:id",
-                element: <EditCategory />
-            },
-            {
-                path: "/exercises/:id/submissions",
-                element: <EditCategory />
-            },
-            {
-                path: "/exercises/:id/submissions/:id",
-                element: <EditCategory />
-            },
-            {
-                path: "/course-categories/:id",
-                element: <EditCategory />
-            },
+                element: <App />,
+                children: [
+                    {
+                        path: "/",
+                        element: <Dashboard />
+                    },
+                    {
+                        path: "/docs",
+                        element: <Documents />
+                    },
+                    {
+                        path: "/docs/new",
+                        element: <AddDocument />
+                    },
+                    {
+                        path: "/docs/:id",
+                        element: <DocumentDetails />
+                    },
+                    {
+                        path: "/docs/edit/:id",
+                        element: <EditDocument />
+                    },
+                    {
+                        path: "/courses",
+                        element: <Courses />
+                    },
+                    {
+                        path: "/courses/new",
+                        element: <AddCourse />
+                    },
+                    {
+                        path: "/courses/edit/:id",
+                        element: <EditCourse />
+                    },
+                    {
+                        path: "/courses/:id/exercises",
+                        element: <CourseExercises />
+                    },
+                    {
+                        path: "/courses/:id/exercises/:id",
+                        element: <EditCourse />
+                    },
+                    {
+                        path: "/courses/:id/exercises/new",
+                        element: <EditCourse />
+                    },
+                    {
+                        path: "/courses/:id/exercises/:id/edit",
+                        element: <EditCourse />
+                    },
+                    {
+                        path: "/course-categories",
+                        element: <Categories />
+                    },
+                    {
+                        path: "/course-categories/new",
+                        element: <AddCategory />
+                    },
+                    {
+                        path: "/course-categories/:id",
+                        element: <EditCategory />
+                    },
+                    {
+                        path: "/exercises/:id/submissions",
+                        element: <EditCategory />
+                    },
+                    {
+                        path: "/exercises/:id/submissions/:id",
+                        element: <EditCategory />
+                    },
+                    {
+                        path: "/course-categories/:id",
+                        element: <EditCategory />
+                    },
 
-            {
-                path: "/students",
-                element: <Students />
-            },
-            {
-                path: "/students/:id",
-                element: <StudentDetail />
-            },
-            {
-                path: "/students/edit/:id",
-                element: <EditStudent />
-            },
-            {
-                path: "/submitted-exercises",
-                element: <SubmittedExercises />
-            },
-            {
-                path: "/submitted-exercises/:id",
-                element: <SubmittedExerciseDetail />
-            },
-            {
-                path: "/submitted-quizzes",
-                element: <SubmittedQuizzes />
-            },
-            {
-                path: "/submitted-quizzes/:id",
-                element: <SubmittedExerciseDetail />
-            },
-            {
-                path: "/students/:id/exercises",
-                element: <StudentDetail />
-            },
-            {
-                path: "/students/:id/exercises/:id",
-                element: <StudentDetail />
-            },
+                    {
+                        path: "/students",
+                        element: <Students />
+                    },
+                    {
+                        path: "/students/:id",
+                        element: <StudentDetail />
+                    },
+                    {
+                        path: "/students/edit/:id",
+                        element: <EditStudent />
+                    },
+                    {
+                        path: "/submitted-exercises",
+                        element: <SubmittedExercises />
+                    },
+                    {
+                        path: "/submitted-exercises/:id",
+                        element: <SubmittedExerciseDetail />
+                    },
+                    {
+                        path: "/submitted-quizzes",
+                        element: <SubmittedQuizzes />
+                    },
+                    {
+                        path: "/submitted-quizzes/:id",
+                        element: <SubmittedExerciseDetail />
+                    },
+                    {
+                        path: "/students/:id/exercises",
+                        element: <StudentDetail />
+                    },
+                    {
+                        path: "/students/:id/exercises/:id",
+                        element: <StudentDetail />
+                    },
 
-            {
-                path: "/users",
-                element: <Users />
-            },
-            // {
-            //     path: "/users/:id",
-            //     element: <StudentDetail />
-            // },
-            // {
-            //     path: "/users/edit/:id",
-            //     element: <EditStudent />
-            // },
-            {
-                path: "/purchases",
-                element: <Purchases />
-            },
-            {
-                path: "/purchases/:id",
-                element: <PurchaseDetails />
-            },
-            {
-                path: "/exercises",
-                element: <CourseExercises />
-            },
-            {
-                path: "/exercises/new",
-                element: <AddExercise />
-            },
-            {
-                path: "/exercises/edit/:id",
-                element: <EditExercise />
-            },
-            {
-                path: "/quizzes",
-                element: <Quizzes />
-            },
-            {
-                path: "/quizzes/:id",
-                element: <QuizDetails />
-            },
-            {
-                path: "/questions",
-                element: <Questions />
-            },
-            {
-                path: "/questions/:id",
-                element: <QuestionDetails />
-            },
-            {
-                path: "/reviews",
-                element: <Reviews />
-            },
-            {
-                path: "/reviews/:id",
-                element: <ReviewDetails />
-            },
-            {
-                path: "/tickets",
-                element: <Tickets />
-            },
-            {
-                path: "/tickets/:id",
-                element: <TicketDetail />
-            },
-            {
-                path: "/certificates",
-                element: <Certificates />
-            },
+                    {
+                        path: "/users",
+                        element: <Users />
+                    },
+                    // {
+                    //     path: "/users/:id",
+                    //     element: <StudentDetail />
+                    // },
+                    // {
+                    //     path: "/users/edit/:id",
+                    //     element: <EditStudent />
+                    // },
+                    {
+                        path: "/purchases",
+                        element: <Purchases />
+                    },
+                    {
+                        path: "/purchases/:id",
+                        element: <PurchaseDetails />
+                    },
+                    {
+                        path: "/exercises",
+                        element: <CourseExercises />
+                    },
+                    {
+                        path: "/exercises/new",
+                        element: <AddExercise />
+                    },
+                    {
+                        path: "/exercises/edit/:id",
+                        element: <EditExercise />
+                    },
+                    {
+                        path: "/quizzes",
+                        element: <Quizzes />
+                    },
+                    {
+                        path: "/quizzes/:id",
+                        element: <QuizDetails />
+                    },
+                    {
+                        path: "/questions",
+                        element: <Questions />
+                    },
+                    {
+                        path: "/questions/:id",
+                        element: <QuestionDetails />
+                    },
+                    {
+                        path: "/reviews",
+                        element: <Reviews />
+                    },
+                    {
+                        path: "/reviews/:id",
+                        element: <ReviewDetails />
+                    },
+                    {
+                        path: "/tickets",
+                        element: <Tickets />
+                    },
+                    {
+                        path: "/tickets/:id",
+                        element: <TicketDetail />
+                    },
+                    {
+                        path: "/certificates",
+                        element: <Certificates />
+                    },
+                ]
+            }
         ]
     },
 

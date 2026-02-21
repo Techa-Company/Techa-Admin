@@ -1,6 +1,8 @@
 // utils/api.ts
 import axios from "axios";
 import Cookies from "js-cookie";
+import { store } from "../store/store";
+import { logout } from "../features/auth/authSlice";
 
 const api = axios.create({
     baseURL: "https://pool.techa.ir/api/ExecuteTSql",
@@ -16,6 +18,23 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+api.interceptors.response.use((response) => response,
+
+    (error) => {
+        // اگر خطا 401 بود
+        if (error.response?.status === 401) {
+            Cookies.remove("token");
+            store.dispatch(logout());
+
+            if (window.location.pathname !== "/login") {
+                window.location.href = "/login";
+            }
+        }
+
+        // خطا را به promise reject برگردان تا catch معمولی کار کند
+        return Promise.reject(error);
+    }
+);
 // -----------------------------
 // تابع اجرای Stored Procedure
 // خروجی: Dataset + وضعیت درخواست
